@@ -43,3 +43,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - https://reactjs.org/docs/getting-started.html
 - https://nextjs.org/docs/getting-started
 - https://spacetraders.io/docs/guide
+- https://redux.js.org/
+- https://react-redux.js.org/introduction/getting-started
