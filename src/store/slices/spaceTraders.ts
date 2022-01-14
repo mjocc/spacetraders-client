@@ -29,7 +29,8 @@ const spaceTradersSlice = createSlice({
 
 export const { initializeSpaceTraders } = spaceTradersSlice.actions;
 
-export const authenticated = (state: RootState) =>
+export const selectAuthenticated = (state: RootState) =>
   state.spaceTraders.username && state.spaceTraders.token;
+export const selectToken = (state: RootState) => state.spaceTraders.token;
 
 export default spaceTradersSlice.reducer;

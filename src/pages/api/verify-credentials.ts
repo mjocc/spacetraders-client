@@ -1,15 +1,25 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { verifyCredentials } from '../../lib/server/spaceTradersHelpers';
+import { generateApiHandler } from '../../lib/utils';
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const { username, token } = req.body;
-    console.log(username)
-    if (username && token) {
-      const validCredentials = await verifyCredentials(username, token);
-      res.status(200).json({ validCredentials });
+const verifyCredentials = async (username: string, token: string) => {
+  let results;
+  const rawResponse = await fetch(
+    `${process.env.SPACETRADERS_API_BASE_PATH}/my/account?${new URLSearchParams(
+      { token }
+    )}`
+  );
+  results = await rawResponse.json();
+  if (results.user) {
+    if (username == results.user.username) {
+      return true;
     }
   }
-}
+  return false;
+};
 
-export default handler;
+export default generateApiHandler<{ username: string; token: string }>(
+  ['username', 'token'],
+  async (req, res, { username, token }) => {
+    const validCredentials = await verifyCredentials(username, token);
+    res.status(200).json({ validCredentials });
+  }
+);

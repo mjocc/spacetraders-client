@@ -10,12 +10,16 @@ const OutcomeToasts: FC<{
 }> = ({ mode, setMode }) => {
   useEffect(() => {
     if (mode !== null) {
-      setTimeout(() => setMode(null), 2500);
+      setTimeout(() => setMode(null), 3000);
     }
   }, [mode]);
   return (
     <>
-      <ToastContainer className="p-3" position="top-end">
+      <ToastContainer
+        className="p-3"
+        position="top-end"
+        style={{ zIndex: 1050 }}
+      >
         <Toast show={mode === 'success'} onClose={() => setMode(null)}>
           <Toast.Header>
             <CheckCircle className="text-success me-2" />

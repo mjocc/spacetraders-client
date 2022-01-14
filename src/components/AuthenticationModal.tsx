@@ -2,7 +2,10 @@ import { FC, FormEventHandler, useEffect, useState } from 'react';
 import { Form, Modal } from 'react-bootstrap';
 import { handleFormChange, makeApiCall } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { authenticated as selectAuthenticated } from '../store/slices/spaceTraders';
+import {
+  initializeSpaceTraders,
+  selectAuthenticated,
+} from '../store/slices/spaceTraders';
 import OutcomeToasts, { OutcomeToastModes } from './OutcomeToasts';
 import SubmitButton from './SubmitButton';
 
@@ -29,12 +32,14 @@ const AuthenticationModal: FC = () => {
       username,
       token,
     });
-    console.log('got to here')
     const { validCredentials } = (await rawResponse.json()) as {
       validCredentials: boolean;
     };
+    if (validCredentials) {
+      setShow(false);
+      dispatch(initializeSpaceTraders({ username, token }));
+    }
     setToastMode(validCredentials ? 'success' : 'error');
-    // dispatch(initializeSpaceTraders({  }));
     setSubmitting(false);
   };
 

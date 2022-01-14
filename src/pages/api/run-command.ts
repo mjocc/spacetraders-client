@@ -1,41 +1,22 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { isValidJson } from '../../lib/utils';
+import { generateApiHandler } from '../../lib/utils';
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const { method, path, body } = req.body;
-    let results;
-    let status = 200;
-
-    if (
-      process.env.TOKEN &&
-      method &&
-      path &&
-      (method === 'GET' || (body && isValidJson(body)))
-    ) {
-      const url =
-        `https://api.spacetraders.io${path}?` +
-        new URLSearchParams({ token: process.env.TOKEN });
-      const rawResponse = await fetch(url, {
-        method,
-        body: method === 'POST' ? body : undefined,
-      });
-      status = rawResponse.status;
-      results = await rawResponse.json();
-    } else {
-      status = 400;
-    }
-
-    res
-      .status(status)
-      .json(
-        status === 200
-          ? { success: true, results }
-          : { success: false, results: null }
-      );
-  } else {
-    res.status(405).json({ success: false, results: null });
+export default generateApiHandler<{
+  method: string;
+  path: string;
+  body: string;
+  token: string;
+}>(
+  ['method', 'path', 'body', 'token'],
+  async (req, res, { method, path, body, token }) => {
+    const url =
+      `${process.env.SPACETRADERS_API_BASE_PATH}${path}?` +
+      new URLSearchParams({ token });
+    console.log(url);
+    const rawResponse = await fetch(url, {
+      method,
+      body: method === 'POST' ? body : undefined,
+    });
+    const results = await rawResponse.json();
+    res.status(200).json({ results });
   }
-}
-
-export default handler;
+);

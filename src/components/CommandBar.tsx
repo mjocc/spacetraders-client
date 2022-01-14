@@ -1,29 +1,30 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent, FC, FormEventHandler, useState } from 'react';
+import { FC, FormEventHandler, useState } from 'react';
 import {
-  Button,
   Col,
   Container,
   Form,
   InputGroup,
   OverlayTrigger,
   Row,
-  Spinner,
-  Toast,
-  ToastContainer,
   Tooltip,
 } from 'react-bootstrap';
 import { handleFormChange, makeApiCall } from '../lib/utils';
-import SubmitButton from './SubmitButton';
+import { useAppSelector } from '../store/hooks';
+import { selectToken } from '../store/slices/spaceTraders';
 import OutcomeToasts, { OutcomeToastModes } from './OutcomeToasts';
+import SubmitButton from './SubmitButton';
 
 const CommandBar: FC = () => {
   const router = useRouter();
+  const [showMessage, setShowMessage] = useState<OutcomeToastModes>(null);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
   const [method, setMethod] = useState<'GET' | 'POST'>('GET');
   const [path, setPath] = useState<string>('');
   const [body, setBody] = useState<string>('{ }');
-  const [showMessage, setShowMessage] = useState<OutcomeToastModes>(null);
-  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  const token = useAppSelector(selectToken);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -32,19 +33,18 @@ const CommandBar: FC = () => {
       method,
       path,
       body,
+      token,
     });
-    type ResponseType = { success: boolean; results: string | null };
-    const response: ResponseType = (await rawResponse.json()) as ResponseType;
-    setSubmitting(false);
-    setShowMessage(response.success ? 'success' : 'error');
-    if (response.success) {
+    const response = await rawResponse.json();
+    setShowMessage(response.results ? 'success' : 'error');
+    if (response.results) {
       const results = JSON.stringify(response.results);
       setMethod('GET');
       setPath('');
-
       const url = '/view-command-results/?' + new URLSearchParams({ results });
       router.push(url);
     }
+    setSubmitting(false);
   };
 
   return (
@@ -75,7 +75,7 @@ const CommandBar: FC = () => {
                       overlay={
                         <Tooltip>
                           <a
-                            href="https://api.spacetraders.io/"
+                            href={`${process.env.SPACETRADERS_API_BASE_PATH}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -85,7 +85,7 @@ const CommandBar: FC = () => {
                       }
                     >
                       <InputGroup.Text id="api-url-prefix">
-                        api.spacetraders.com
+                        api.spacetraders.io
                       </InputGroup.Text>
                     </OverlayTrigger>
                     <Form.Control
