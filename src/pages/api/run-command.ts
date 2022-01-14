@@ -1,4 +1,3 @@
-import { request } from 'http';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { isValidJson } from '../../lib/utils';
 
@@ -17,12 +16,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const url =
         `https://api.spacetraders.io${path}?` +
         new URLSearchParams({ token: process.env.TOKEN });
-      const rawResult = await fetch(url, {
+      const rawResponse = await fetch(url, {
         method,
         body: method === 'POST' ? body : undefined,
       });
-      status = rawResult.status;
-      results = await rawResult.json();
+      status = rawResponse.status;
+      results = await rawResponse.json();
     } else {
       status = 400;
     }

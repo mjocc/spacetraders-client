@@ -45,3 +45,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - https://spacetraders.io/docs/guide
 - https://redux.js.org/
 - https://react-redux.js.org/introduction/getting-started
+- https://github.com/rt2zz/redux-persist

@@ -1,20 +1,19 @@
 import 'bootswatch/dist/cyborg/bootstrap.min.css';
 import type { AppProps } from 'next/app';
-import { useEffect } from 'react';
+import { Provider } from 'react-redux';
+import AuthenticationModal from '../components/AuthenticationModal';
 import CommandBar from '../components/CommandBar';
 import Navbar from '../components/Navbar';
-import { initializeSpaceTradersSdk } from '../lib/spaceTradersSdkUtils';
+import store from '../store/store';
 
 function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    initializeSpaceTradersSdk();
-  }, []);
   return (
-    <>
+    <Provider store={store}>
       <Navbar />
+      <AuthenticationModal />
       <Component {...pageProps} />
       <CommandBar />
-    </>
+    </Provider>
   );
 }
 
