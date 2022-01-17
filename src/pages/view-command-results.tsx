@@ -14,7 +14,7 @@ const ViewCommandResult: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Result | Spacetraders Client</title>
+        <title>Result | SpaceTraders Client</title>
         <meta name="description" content="Results from executed command" />
       </Head>
       <h1 className="h5">Query results</h1>

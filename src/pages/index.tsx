@@ -5,7 +5,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Home | Spacetraders Client</title>
+        <title>Home | SpaceTraders Client</title>
         <meta name="description" content="Client for spacetraders.io game" />
       </Head>
     </>
