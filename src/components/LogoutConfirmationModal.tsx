@@ -12,8 +12,8 @@ const LogoutConfirmationModal: FC<{
         <Modal.Title>Logout confirmation</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Are you sure you want to log out? You'll have to enter your username and
-        token again.
+        Are you sure you want to log out? You&apos;ll have to enter your
+        username and token again.
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

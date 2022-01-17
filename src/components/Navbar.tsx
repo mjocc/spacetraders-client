@@ -1,12 +1,14 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 import { Container, Dropdown, Navbar } from 'react-bootstrap';
+import spaceTradersLogo from '../../public/spacetraders.svg';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import {
   logout,
   selectAuthenticated,
-  selectUsername,
+  selectUsername
 } from '../store/slices/spaceTraders';
 import LogoutConfirmationModal from './LogoutConfirmationModal';
 
@@ -22,16 +24,17 @@ const CustomNavbar: FC = () => {
   return (
     <Navbar bg="dark" variant="dark" as="header">
       <Container>
-        <Link href="/">
-          <Navbar.Brand href="/">
-            <img
+        <Link href="/" passHref>
+          <Navbar.Brand
+            className="d-flex justify-content-center align-items-center"
+          >
+            <Image
               alt="spacetraders logo"
-              src="/spacetraders.svg"
+              src={spaceTradersLogo}
               width="30"
               height="30"
-              className="d-inline-block align-top me-2"
             />
-            Spacetraders Client
+            <span className="ms-1">SpaceTraders Client</span>
           </Navbar.Brand>
         </Link>
         {authenticated && (

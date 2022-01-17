@@ -1,5 +1,6 @@
 import 'bootswatch/dist/cyborg/bootstrap.min.css';
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import AuthenticationModal from '../components/AuthenticationModal';
@@ -12,19 +13,24 @@ import store, { persistor } from '../store/store';
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Navbar />
-        <AuthenticationModal />
-        <OutcomeToasts />
+    <>
+      <Head>
+        <link rel="icon" type="image/svg+xml" href="/spacetraders.svg" />
+      </Head>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Navbar />
+          <AuthenticationModal />
+          <OutcomeToasts />
 
-        <Layout sidebar={<Sidebar />}>
-          <Component {...pageProps} />
-        </Layout>
+          <Layout sidebar={<Sidebar />}>
+            <Component {...pageProps} />
+          </Layout>
 
-        <CommandBar />
-      </PersistGate>
-    </Provider>
+          <CommandBar />
+        </PersistGate>
+      </Provider>
+    </>
   );
 }
 

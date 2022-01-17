@@ -1,13 +1,12 @@
 import { FC, FormEventHandler, useEffect, useState } from 'react';
-import { Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { handleFormChange, makeApiCall } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import {
   initializeSpaceTraders,
-  selectAuthenticated,
+  selectAuthenticated
 } from '../store/slices/spaceTraders';
-import OutcomeToasts from './OutcomeToasts';
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
@@ -78,6 +77,10 @@ const AuthenticationModal: FC = () => {
           </Modal.Body>
 
           <Modal.Footer>
+            {/* // TODO: Implement claiming of token */}
+            <Button variant="secondary" className="me-auto">
+              Claim a token
+            </Button>
             <SubmitButton submitting={submitting} />
           </Modal.Footer>
         </Form>

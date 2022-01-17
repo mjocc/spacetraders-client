@@ -18,7 +18,6 @@ const ViewCommandResult: NextPage = () => {
       <Head>
         <title>Result | Spacetraders Client</title>
         <meta name="description" content="Results from executed command" />
-        <link rel="icon" type="image/svg+xml" href="/spacetraders.svg" />
       </Head>
       <h1 className="h5">Query results</h1>
       {router.query ? (

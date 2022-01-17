@@ -22,7 +22,7 @@ const OutcomeToasts: FC = () => {
     if (mode !== null) {
       setTimeout(() => closeToast(), 3000);
     }
-  }, [mode]);
+  }, [mode, closeToast]);
 
   return (
     <>
