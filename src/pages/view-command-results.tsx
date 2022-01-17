@@ -1,8 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
 import prettyjson from 'prettyjson';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml';

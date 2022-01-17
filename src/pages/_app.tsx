@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import AuthenticationModal from '../components/AuthenticationModal';
 import CommandBar from '../components/CommandBar';
 import Layout from '../components/Layout';
+import LoadingScreen from '../components/LoadingScreen';
 import Navbar from '../components/Navbar';
 import OutcomeToasts from '../components/OutcomeToasts';
 import Sidebar from '../components/Sidebar';
@@ -18,7 +19,7 @@ function App({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/svg+xml" href="/spacetraders.svg" />
       </Head>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={<LoadingScreen />} persistor={persistor}>
           <Navbar />
           <AuthenticationModal />
           <OutcomeToasts />
