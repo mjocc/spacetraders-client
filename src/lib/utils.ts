@@ -34,6 +34,10 @@ export const generateApiHandler =
     ) => void
   ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
+    const triggerError = (errorCode: number) => {
+      res.status(errorCode).json({ error: errorCode });
+    };
+
     if (req.method === 'POST') {
       if (req.body) {
         const bodyParamsPresent = bodyParams.map((param) => param in req.body);
@@ -43,15 +47,15 @@ export const generateApiHandler =
             handler(req, res, req.body);
           } catch (err) {
             console.error(err);
-            res.status(500).json({ error: 500 });
+            triggerError(500);
           }
         } else {
-          res.status(400).json({ error: 400 });
+          triggerError(400);
         }
       } else {
-        res.status(400).json({ error: 400 });
+        triggerError(400);
       }
     } else {
-      res.status(405).json({ error: 405 });
+      triggerError(405);
     }
   };
