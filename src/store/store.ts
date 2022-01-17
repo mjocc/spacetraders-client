@@ -8,19 +8,22 @@ import {
   persistStore,
   PURGE,
   REGISTER,
-  REHYDRATE
+  REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import spaceTradersReducer from './slices/spaceTraders';
+import outcomeToastsReducer from './slices/outcomeToasts';
 
 const persistConfig = {
-  key: 'root',
+  key: 'auth',
+  whitelist: ['spaceTraders'],
   version: 1,
   storage,
 };
 
 const rootReducer = combineReducers({
   spaceTraders: spaceTradersReducer,
+  outcomeToasts: outcomeToastsReducer,
 });
 const reducer = persistReducer(persistConfig, rootReducer);
 

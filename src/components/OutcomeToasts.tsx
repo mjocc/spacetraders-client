@@ -1,40 +1,45 @@
-import { Dispatch, FC, SetStateAction, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import { AlertCircle, CheckCircle } from 'react-feather';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import {
+  getManageToast,
+  selectBodyText,
+  selectMode
+} from '../store/slices/outcomeToasts';
 
 export type OutcomeToastModes = null | 'success' | 'error';
 
-const OutcomeToasts: FC<{
-  mode: OutcomeToastModes;
-  setMode: Dispatch<SetStateAction<OutcomeToastModes>>;
-}> = ({ mode, setMode }) => {
+const OutcomeToasts: FC = () => {
+  const containerProps = { style: { zIndex: 1060 }, className: 'p-3' };
+
+  const dispatch = useAppDispatch();
+  const bodyText = useAppSelector(selectBodyText);
+  const mode = useAppSelector(selectMode);
+  const { closeToast } = getManageToast(dispatch);
+
   useEffect(() => {
     if (mode !== null) {
-      setTimeout(() => setMode(null), 3000);
+      setTimeout(() => closeToast(), 3000);
     }
   }, [mode]);
+
   return (
     <>
-      <ToastContainer
-        className="p-3"
-        position="top-end"
-        style={{ zIndex: 1050 }}
-      >
-        <Toast show={mode === 'success'} onClose={() => setMode(null)}>
+      <ToastContainer position="top-end" {...containerProps}>
+        <Toast show={mode === 'success'} onClose={() => closeToast()}>
           <Toast.Header>
             <CheckCircle className="text-success me-2" />
             <strong className="me-auto">Success</strong>
           </Toast.Header>
-          <Toast.Body>Command successfully executed.</Toast.Body>
+          <Toast.Body>{bodyText.success}</Toast.Body>
         </Toast>
-      </ToastContainer>
-      <ToastContainer className="p-3" position="top-end">
-        <Toast show={mode === 'error'} onClose={() => setMode(null)}>
+        <Toast show={mode === 'error'} onClose={() => closeToast()}>
           <Toast.Header>
             <AlertCircle className="text-danger me-2" />
             <strong className="me-auto">Error</strong>
           </Toast.Header>
-          <Toast.Body>Something went wrong. Please try again.</Toast.Body>
+          <Toast.Body>{bodyText.error}</Toast.Body>
         </Toast>
       </ToastContainer>
     </>

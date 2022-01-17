@@ -24,13 +24,18 @@ const spaceTradersSlice = createSlice({
       state.username = username;
       state.token = token;
     },
+    logout(state) {
+      state.username = null;
+      state.token = null;
+    },
   },
 });
 
-export const { initializeSpaceTraders } = spaceTradersSlice.actions;
+export const { initializeSpaceTraders, logout } = spaceTradersSlice.actions;
 
-export const selectAuthenticated = (state: RootState) =>
-  state.spaceTraders.username && state.spaceTraders.token;
+export const selectAuthenticated = (state: RootState): boolean =>
+  !!(state.spaceTraders.username && state.spaceTraders.token);
+export const selectUsername = (state: RootState) => state.spaceTraders.username;
 export const selectToken = (state: RootState) => state.spaceTraders.token;
 
 export default spaceTradersSlice.reducer;

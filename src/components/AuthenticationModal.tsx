@@ -2,28 +2,29 @@ import { FC, FormEventHandler, useEffect, useState } from 'react';
 import { Form, Modal } from 'react-bootstrap';
 import { handleFormChange, makeApiCall } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { getManageToast } from '../store/slices/outcomeToasts';
 import {
   initializeSpaceTraders,
   selectAuthenticated,
 } from '../store/slices/spaceTraders';
-import OutcomeToasts, { OutcomeToastModes } from './OutcomeToasts';
+import OutcomeToasts from './OutcomeToasts';
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
   const [show, setShow] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [toastMode, setToastMode] = useState<OutcomeToastModes>(null);
 
   const [username, setUsername] = useState<string>('');
   const [token, setToken] = useState<string>('');
 
   const dispatch = useAppDispatch();
+  const { openToast } = getManageToast(dispatch);
   const authenticated = useAppSelector(selectAuthenticated);
   useEffect(() => {
     if (!authenticated) {
       setShow(true);
     }
-  }, []);
+  }, [authenticated]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -38,8 +39,13 @@ const AuthenticationModal: FC = () => {
     if (validCredentials) {
       setShow(false);
       dispatch(initializeSpaceTraders({ username, token }));
+      setUsername('');
+      setToken('');
     }
-    setToastMode(validCredentials ? 'success' : 'error');
+    openToast(validCredentials ? 'success' : 'error', {
+      success: 'Authenticated successfully.',
+      error: 'Invalid authentication information.',
+    });
     setSubmitting(false);
   };
 
@@ -64,7 +70,7 @@ const AuthenticationModal: FC = () => {
             <Form.Group controlId="authentication-modal-token-field">
               <Form.Label>Token</Form.Label>
               <Form.Control
-                type="text"
+                type="password"
                 value={token}
                 onChange={handleFormChange(setToken)}
               />
@@ -76,7 +82,6 @@ const AuthenticationModal: FC = () => {
           </Modal.Footer>
         </Form>
       </Modal>
-      <OutcomeToasts mode={toastMode} setMode={setToastMode} />
     </>
   );
 };

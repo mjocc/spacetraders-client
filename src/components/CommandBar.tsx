@@ -7,23 +7,24 @@ import {
   InputGroup,
   OverlayTrigger,
   Row,
-  Tooltip,
+  Tooltip
 } from 'react-bootstrap';
 import { handleFormChange, makeApiCall } from '../lib/utils';
-import { useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { getManageToast } from '../store/slices/outcomeToasts';
 import { selectToken } from '../store/slices/spaceTraders';
-import OutcomeToasts, { OutcomeToastModes } from './OutcomeToasts';
 import SubmitButton from './SubmitButton';
 
 const CommandBar: FC = () => {
   const router = useRouter();
-  const [showMessage, setShowMessage] = useState<OutcomeToastModes>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   const [method, setMethod] = useState<'GET' | 'POST'>('GET');
   const [path, setPath] = useState<string>('');
   const [body, setBody] = useState<string>('{ }');
 
+  const dispatch = useAppDispatch();
+  const { openToast } = getManageToast(dispatch);
   const token = useAppSelector(selectToken);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -36,7 +37,7 @@ const CommandBar: FC = () => {
       token,
     });
     const response = await rawResponse.json();
-    setShowMessage(response.results ? 'success' : 'error');
+    openToast(response.results ? 'success' : 'error');
     if (response.results) {
       const results = JSON.stringify(response.results);
       setMethod('GET');
@@ -121,7 +122,6 @@ const CommandBar: FC = () => {
           </Form>
         </div>
       </Container>
-      <OutcomeToasts mode={showMessage} setMode={setShowMessage} />
     </>
   );
 };

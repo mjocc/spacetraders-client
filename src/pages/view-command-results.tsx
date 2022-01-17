@@ -20,24 +20,22 @@ const ViewCommandResult: NextPage = () => {
         <meta name="description" content="Results from executed command" />
         <link rel="icon" type="image/svg+xml" href="/spacetraders.svg" />
       </Head>
-      <Container className="mt-3">
-        <h1 className="h5">Query results</h1>
-        {router.query ? (
-          router.query.results ? (
-            isValidJson(router.query.results as string) ? (
-              <SyntaxHighlighter language="yaml" style={atomDark}>
-                {prettyjson.render(JSON.parse(router.query.results as string))}
-              </SyntaxHighlighter>
-            ) : (
-              "Invalid 'results' query parameter."
-            )
+      <h1 className="h5">Query results</h1>
+      {router.query ? (
+        router.query.results ? (
+          isValidJson(router.query.results as string) ? (
+            <SyntaxHighlighter language="yaml" style={atomDark}>
+              {prettyjson.render(JSON.parse(router.query.results as string))}
+            </SyntaxHighlighter>
           ) : (
-            "No 'results' query parameter provided."
+            "Invalid 'results' query parameter."
           )
         ) : (
-          'Loading...'
-        )}
-      </Container>
+          "No 'results' query parameter provided."
+        )
+      ) : (
+        'Loading...'
+      )}
     </>
   );
 };

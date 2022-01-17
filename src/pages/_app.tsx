@@ -4,7 +4,10 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import AuthenticationModal from '../components/AuthenticationModal';
 import CommandBar from '../components/CommandBar';
+import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
+import OutcomeToasts from '../components/OutcomeToasts';
+import Sidebar from '../components/Sidebar';
 import store, { persistor } from '../store/store';
 
 function App({ Component, pageProps }: AppProps) {
@@ -13,7 +16,12 @@ function App({ Component, pageProps }: AppProps) {
       <PersistGate loading={null} persistor={persistor}>
         <Navbar />
         <AuthenticationModal />
-        <Component {...pageProps} />
+        <OutcomeToasts />
+
+        <Layout sidebar={<Sidebar />}>
+          <Component {...pageProps} />
+        </Layout>
+
         <CommandBar />
       </PersistGate>
     </Provider>

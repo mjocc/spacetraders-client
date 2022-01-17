@@ -5,7 +5,7 @@ const ErrorPage: FC<{ errorCode: number; errorText: string }> = ({
   errorText,
 }) => (
   <div
-    style={{ paddingTop: '58px', paddingBottom: '122px' }}
+    style={{ paddingTop: '58px', paddingBottom: '122px', paddingLeft: 'calc(16.666667%)' ,zIndex: -1 }}
     className="position-absolute d-flex top-0 start-0 w-100 h-100 justify-content-center align-items-center h-100 w-100"
   >
     <div className="border rounded-3 p-4 d-flex flex-column justify-content-center align-items-center">
