@@ -3,7 +3,7 @@ import { generateApiHandler } from '../../lib/utils';
 const verifyCredentials = async (username: string, token: string) => {
   let results;
   const rawResponse = await fetch(
-    `${process.env.SPACETRADERS_API_BASE_PATH}/my/account?${new URLSearchParams(
+    `${process.env.SPACETRADERS_API_BASE_PATH}my/account?${new URLSearchParams(
       { token }
     )}`
   );

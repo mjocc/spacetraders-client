@@ -11,7 +11,6 @@ export default generateApiHandler<{
     const url =
       `${process.env.SPACETRADERS_API_BASE_PATH}${path}?` +
       new URLSearchParams({ token });
-    console.log(url);
     const rawResponse = await fetch(url, {
       method,
       body: method === 'POST' ? body : undefined,
