@@ -5,12 +5,13 @@ interface HistoryItemParams {
   method: 'GET' | 'POST';
   path: string;
   body: string;
-  results: string;
+  results: any;
 }
 
 interface HistoryItem extends HistoryItemParams {
   id: string;
   datetime: number;
+  error: boolean;
 }
 
 const commandHistoryAdapter = createEntityAdapter<HistoryItem>({
@@ -33,7 +34,9 @@ export const { addHistoryItem, removeHistoryItem, clearHistory } =
 export const createHistoryItem = (params: HistoryItemParams) => {
   const id = nanoid();
   const datetime = new Date().getTime();
-  return { id, datetime, ...params };
+  const error = !!params.results.error;
+
+  return { id, datetime, error, ...params };
 };
 
 const commandHistorySelectors = commandHistoryAdapter.getSelectors<RootState>(

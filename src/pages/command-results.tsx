@@ -2,11 +2,10 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import prettyjson from 'prettyjson';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml';
 import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
-import { isValidJson } from '../lib/utils';
 import { useAppSelector } from '../store/hooks';
 import { selectHistoryById } from '../store/slices/commandHistory';
 
@@ -15,7 +14,6 @@ SyntaxHighlighter.registerLanguage('yaml', yaml);
 const ViewCommandResult: NextPage = () => {
   const router = useRouter();
   const [id, setId] = useState<string>('');
-  const [results, setResults] = useState<string | null>(null);
   const historyItem = useAppSelector(selectHistoryById(id));
 
   useEffect(() => {
@@ -44,7 +42,7 @@ const ViewCommandResult: NextPage = () => {
               {prettyjson.render(historyItem.results)}
             </SyntaxHighlighter>
           ) : (
-            "Invalid 'id' query parameter."
+            "Invalid 'id' query parameter. The history item may have been deleted."
           )
         ) : (
           "No 'id' query parameter provided."
