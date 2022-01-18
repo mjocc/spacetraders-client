@@ -1,15 +1,11 @@
-import { generateApiHandler } from '../../lib/utils';
+import { generateApiHandler, generateApiUrl } from '../../lib/utils';
 
 const verifyCredentials = async (username: string, token: string) => {
-  let results;
-  const rawResponse = await fetch(
-    `${process.env.SPACETRADERS_API_BASE_PATH}my/account?${new URLSearchParams(
-      { token }
-    )}`
-  );
-  results = await rawResponse.json();
+  const url = generateApiUrl('/my/account', { token });
+  const rawResponse = await fetch(url);
+  const results = await rawResponse.json();
   if (results.user) {
-    if (username == results.user.username) {
+    if (username === results.user.username) {
       return true;
     }
   }

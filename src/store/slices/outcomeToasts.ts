@@ -6,13 +6,22 @@ interface OutcomeToastsSlice {
   mode: OutcomeToastModes;
   successText: string;
   errorText: string;
+  closeDelay: number;
 }
 
 const initialState: OutcomeToastsSlice = {
   mode: null,
   successText: 'Command successfully executed.',
   errorText: 'Something went wrong. Please try again.',
+  closeDelay: 3000,
 };
+
+interface SetToastModeParams {
+  mode: OutcomeToastModes;
+  error?: string;
+  success?: string;
+  closeDelay?: number;
+}
 
 const outcomeToastsSlice = createSlice({
   name: 'toasts',
@@ -21,12 +30,8 @@ const outcomeToastsSlice = createSlice({
     setToastMode(
       state,
       {
-        payload: { mode, error, success },
-      }: PayloadAction<{
-        mode: OutcomeToastModes;
-        error?: string;
-        success?: string;
-      }>
+        payload: { mode, error, success, closeDelay },
+      }: PayloadAction<SetToastModeParams>
     ) {
       state.mode = mode;
 
@@ -36,32 +41,45 @@ const outcomeToastsSlice = createSlice({
       if (success) {
         state.successText = success;
       }
+      if (closeDelay) {
+        state.closeDelay = closeDelay;
+      }
     },
     closeToast(state) {
       state.mode = initialState.mode;
     },
-    resetToastText(state) {
+    resetToastDetails(state) {
       state.successText = initialState.successText;
       state.errorText = initialState.errorText;
+      state.closeDelay = initialState.closeDelay;
     },
   },
 });
 
-const { setToastMode, closeToast, resetToastText } = outcomeToastsSlice.actions;
+const { setToastMode, closeToast, resetToastDetails } =
+  outcomeToastsSlice.actions;
 
 const getOpenToast =
   (dispatch: AppDispatch) =>
   (
     mode: OutcomeToastModes,
-    messages?: { error?: string; success?: string }
+    messages: { error?: string; success?: string },
+    closeDelay?: number
   ) => {
-    const params = messages ? { mode, ...messages } : { mode };
+    let params: SetToastModeParams = { mode };
+    if (messages) {
+      params = { ...params, ...messages };
+    }
+    if (closeDelay) {
+      params = { ...params, closeDelay };
+    }
+
     dispatch(setToastMode(params));
   };
 const getCloseToast = (dispatch: AppDispatch) => () => {
   dispatch(closeToast());
   setTimeout(() => {
-    dispatch(resetToastText());
+    dispatch(resetToastDetails());
   }, 150);
 };
 export const getManageToast = (dispatch: AppDispatch) => {
@@ -76,5 +94,7 @@ export const selectBodyText = (state: RootState) => ({
   success: state.outcomeToasts.successText,
   error: state.outcomeToasts.errorText,
 });
+export const selectCloseDelay = (state: RootState) =>
+  state.outcomeToasts.closeDelay;
 
 export default outcomeToastsSlice.reducer;

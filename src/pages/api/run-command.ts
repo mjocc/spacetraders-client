@@ -1,4 +1,8 @@
-import { generateApiHandler } from '../../lib/utils';
+import {
+  generateApiHandler,
+  generateApiUrl,
+  triggerServerError,
+} from '../../lib/utils';
 
 export default generateApiHandler<{
   method: string;
@@ -8,14 +12,18 @@ export default generateApiHandler<{
 }>(
   ['method', 'path', 'body', 'token'],
   async (req, res, { method, path, body, token }) => {
-    const url =
-      `${process.env.SPACETRADERS_API_BASE_PATH}${path}?` +
-      new URLSearchParams({ token });
+    const url = generateApiUrl(path, { token });
     const rawResponse = await fetch(url, {
       method,
       body: method === 'POST' ? body : undefined,
     });
-    const results = await rawResponse.json();
+    let results;
+    try {
+      results = await rawResponse.json();
+    } catch (err) {
+      triggerServerError(res, 400);
+      return;
+    }
     res.status(200).json({ results });
   }
 );

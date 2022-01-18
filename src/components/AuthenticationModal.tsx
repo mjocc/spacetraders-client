@@ -1,17 +1,23 @@
-import { FC, FormEventHandler, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FC, FormEventHandler, useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { handleFormChange, makeApiCall } from '../lib/utils';
+import {
+  handleFormChange,
+  makeApiCall,
+  viewCommandResults,
+} from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import {
   initializeSpaceTraders,
-  selectAuthenticated
+  selectAuthenticated,
 } from '../store/slices/spaceTraders';
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
-  const [show, setShow] = useState<boolean>(false);
+  const router = useRouter();
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [claimingToken, setClaimingToken] = useState<boolean>(false);
 
   const [username, setUsername] = useState<string>('');
   const [token, setToken] = useState<string>('');
@@ -19,40 +25,73 @@ const AuthenticationModal: FC = () => {
   const dispatch = useAppDispatch();
   const { openToast } = getManageToast(dispatch);
   const authenticated = useAppSelector(selectAuthenticated);
+
+  const usernameField = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (!authenticated) {
-      setShow(true);
+    if (!authenticated && usernameField.current) {
+      usernameField.current.focus();
     }
-  }, [authenticated]);
+  }, [authenticated, usernameField]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-    const rawResponse = await makeApiCall('/api/verify-credentials', {
-      username,
-      token,
-    });
-    const { validCredentials } = (await rawResponse.json()) as {
-      validCredentials: boolean;
-    };
-    if (validCredentials) {
-      setShow(false);
+
+    const authenticate = (username: string, token: string) => {
       dispatch(initializeSpaceTraders({ username, token }));
       setUsername('');
       setToken('');
+    };
+
+    if (claimingToken) {
+      const rawResponse = await makeApiCall('/api/claim-token', {
+        username,
+      });
+      const results = await rawResponse.json();
+      if (rawResponse.status === 409 && results.message) {
+        openToast('error', { error: results.message });
+      } else if (results.token) {
+        authenticate(username, results.token);
+        openToast('success', {
+          success:
+            "Username claimed successfully. Authenticated automatically. See 'Query results' for details.",
+        }, 5000);
+        viewCommandResults(router, results);
+      }
+    } else {
+      const rawResponse = await makeApiCall('/api/verify-credentials', {
+        username,
+        token,
+      });
+      const results = await rawResponse.json();
+      if (results.validCredentials) {
+        authenticate(username, token);
+      }
+      openToast(results.validCredentials ? 'success' : 'error', {
+        success: 'Authenticated successfully.',
+        error: 'Invalid authentication information.',
+      });
     }
-    openToast(validCredentials ? 'success' : 'error', {
-      success: 'Authenticated successfully.',
-      error: 'Invalid authentication information.',
-    });
+
     setSubmitting(false);
+  };
+
+  const handleClaimToken = () => {
+    setClaimingToken((value) => !value);
+    if (usernameField.current) {
+      usernameField.current.focus();
+    }
   };
 
   return (
     <>
-      <Modal show={show}>
+      <Modal show={!authenticated}>
         <Modal.Header>
-          <Modal.Title>Enter authentication information</Modal.Title>
+          <Modal.Title>
+            {claimingToken
+              ? 'Enter a username to claim it'
+              : 'Enter authentication information'}
+          </Modal.Title>
         </Modal.Header>
 
         <Form onSubmit={handleSubmit}>
@@ -64,6 +103,7 @@ const AuthenticationModal: FC = () => {
                 type="text"
                 value={username}
                 onChange={handleFormChange(setUsername)}
+                ref={usernameField}
               />
             </Form.Group>
             <Form.Group controlId="authentication-modal-token-field">
@@ -72,16 +112,22 @@ const AuthenticationModal: FC = () => {
                 type="password"
                 value={token}
                 onChange={handleFormChange(setToken)}
+                disabled={claimingToken}
               />
             </Form.Group>
           </Modal.Body>
 
           <Modal.Footer>
-            {/* // TODO: Implement claiming of token */}
-            <Button variant="secondary" className="me-auto">
-              Claim a token
+            <Button
+              variant="secondary"
+              className="me-auto"
+              onClick={handleClaimToken}
+            >
+              {claimingToken ? 'Enter details' : 'Claim a username'}
             </Button>
-            <SubmitButton submitting={submitting} />
+            <SubmitButton submitting={submitting}>
+              {claimingToken ? 'Claim' : 'Submit'}
+            </SubmitButton>
           </Modal.Footer>
         </Form>
       </Modal>

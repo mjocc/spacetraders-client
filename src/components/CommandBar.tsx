@@ -7,9 +7,13 @@ import {
   InputGroup,
   OverlayTrigger,
   Row,
-  Tooltip
+  Tooltip,
 } from 'react-bootstrap';
-import { handleFormChange, makeApiCall } from '../lib/utils';
+import {
+  handleFormChange,
+  makeApiCall,
+  viewCommandResults,
+} from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import { selectToken } from '../store/slices/spaceTraders';
@@ -39,11 +43,9 @@ const CommandBar: FC = () => {
     const response = await rawResponse.json();
     openToast(response.results ? 'success' : 'error');
     if (response.results) {
-      const results = JSON.stringify(response.results);
+      viewCommandResults(router, response.results);
       setMethod('GET');
       setPath('');
-      const url = '/view-command-results/?' + new URLSearchParams({ results });
-      router.push(url);
     }
     setSubmitting(false);
   };

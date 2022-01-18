@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   getManageToast,
   selectBodyText,
+  selectCloseDelay,
   selectMode
 } from '../store/slices/outcomeToasts';
 
@@ -14,15 +15,16 @@ const OutcomeToasts: FC = () => {
   const containerProps = { style: { zIndex: 1060 }, className: 'p-3' };
 
   const dispatch = useAppDispatch();
-  const bodyText = useAppSelector(selectBodyText);
   const mode = useAppSelector(selectMode);
+  const bodyText = useAppSelector(selectBodyText);
+  const closeDelay = useAppSelector(selectCloseDelay);
   const { closeToast } = getManageToast(dispatch);
 
   useEffect(() => {
     if (mode !== null) {
-      setTimeout(() => closeToast(), 3000);
+      setTimeout(() => closeToast(), closeDelay);
     }
-  }, [mode, closeToast]);
+  }, [mode, closeToast, closeDelay]);
 
   return (
     <>
