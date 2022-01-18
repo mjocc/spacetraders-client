@@ -80,9 +80,7 @@ export const generateApiUrl = (
   );
 };
 
-export const viewCommandResults = (router: NextRouter, results: any) => {
-  const stringResults = JSON.stringify(results);
-  const url =
-    '/view-command-results?' + new URLSearchParams({ results: stringResults });
+export const viewCommandResults = (router: NextRouter, resultsId: string) => {
+  const url = '/command-results?' + new URLSearchParams({ id: resultsId });
   router.push(url);
 };

@@ -13,7 +13,7 @@ const LogoutConfirmationModal: FC<{
       </Modal.Header>
       <Modal.Body>
         Are you sure you want to log out? You&apos;ll have to enter your
-        username and token again.
+        username and token again and your history will be cleared.
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

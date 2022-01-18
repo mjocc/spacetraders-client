@@ -15,6 +15,10 @@ import {
   viewCommandResults,
 } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import {
+  addHistoryItem,
+  createHistoryItem,
+} from '../store/slices/commandHistory';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import { selectToken } from '../store/slices/spaceTraders';
 import SubmitButton from './SubmitButton';
@@ -44,6 +48,11 @@ const CommandBar: FC = () => {
     openToast(response.results ? 'success' : 'error');
     if (response.results) {
       viewCommandResults(router, response.results);
+      dispatch(
+        addHistoryItem(
+          createHistoryItem({ method, path, body, results: response.results })
+        )
+      );
       setMethod('GET');
       setPath('');
     }

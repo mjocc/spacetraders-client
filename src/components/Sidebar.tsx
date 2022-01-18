@@ -27,8 +27,11 @@ const Sidebar: FC = () => {
   return (
     <Nav variant="pills" className="flex-column" activeKey={router.pathname}>
       <NavLink href="/">Home</NavLink>
-      <NavLink href="/view-command-results" hiddenUntilActive>
+      <NavLink href="/command-results" hiddenUntilActive>
         Command results
+      </NavLink>
+      <NavLink href="/command-history" hiddenUntilActive>
+        Command history
       </NavLink>
     </Nav>
   );

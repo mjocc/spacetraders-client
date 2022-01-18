@@ -24,7 +24,7 @@ interface SetToastModeParams {
 }
 
 const outcomeToastsSlice = createSlice({
-  name: 'toasts',
+  name: 'outcomeToasts',
   initialState,
   reducers: {
     setToastMode(
@@ -63,7 +63,7 @@ const getOpenToast =
   (dispatch: AppDispatch) =>
   (
     mode: OutcomeToastModes,
-    messages: { error?: string; success?: string },
+    messages?: { error?: string; success?: string },
     closeDelay?: number
   ) => {
     let params: SetToastModeParams = { mode };

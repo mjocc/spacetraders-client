@@ -4,11 +4,12 @@ import { FC, useState } from 'react';
 import { Container, Dropdown, Navbar } from 'react-bootstrap';
 import spaceTradersLogo from '../../public/spacetraders.svg';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { clearHistory } from '../store/slices/commandHistory';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import {
   logout,
   selectAuthenticated,
-  selectUsername
+  selectUsername,
 } from '../store/slices/spaceTraders';
 import LogoutConfirmationModal from './LogoutConfirmationModal';
 
@@ -25,9 +26,7 @@ const CustomNavbar: FC = () => {
     <Navbar bg="dark" variant="dark" as="header">
       <Container>
         <Link href="/" passHref>
-          <Navbar.Brand
-            className="d-flex justify-content-center align-items-center"
-          >
+          <Navbar.Brand className="d-flex justify-content-center align-items-center">
             <Image
               alt="spacetraders logo"
               src={spaceTradersLogo}
@@ -55,6 +54,7 @@ const CustomNavbar: FC = () => {
               handleClose={handleClose}
               onConfirmation={() => {
                 dispatch(logout());
+                dispatch(clearHistory());
                 openToast('success', { success: 'Logged out successfully.' });
               }}
             />

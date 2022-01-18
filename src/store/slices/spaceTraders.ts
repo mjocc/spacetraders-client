@@ -12,7 +12,7 @@ const initialState: SpaceTradersSlice = {
 };
 
 const spaceTradersSlice = createSlice({
-  name: 'spacetraders',
+  name: 'spaceTraders',
   initialState,
   reducers: {
     initializeSpaceTraders(

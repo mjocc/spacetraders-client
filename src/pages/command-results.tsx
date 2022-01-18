@@ -2,15 +2,34 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import prettyjson from 'prettyjson';
+import { useCallback, useEffect, useState } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml';
 import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
 import { isValidJson } from '../lib/utils';
+import { useAppSelector } from '../store/hooks';
+import { selectHistoryById } from '../store/slices/commandHistory';
 
 SyntaxHighlighter.registerLanguage('yaml', yaml);
 
 const ViewCommandResult: NextPage = () => {
   const router = useRouter();
+  const [id, setId] = useState<string>('');
+  const [results, setResults] = useState<string | null>(null);
+  const historyItem = useAppSelector(selectHistoryById(id));
+
+  useEffect(() => {
+    if (router.query.id) {
+      let id;
+      if (typeof router.query.id !== 'string') {
+        id = router.query.id.join('');
+      } else {
+        id = router.query.id;
+      }
+      setId(id);
+    }
+  }, [router.query]);
+
   return (
     <>
       <Head>
@@ -19,16 +38,16 @@ const ViewCommandResult: NextPage = () => {
       </Head>
       <h1 className="h5">Query results</h1>
       {router.query ? (
-        router.query.results ? (
-          isValidJson(router.query.results as string) ? (
+        id ? (
+          historyItem ? (
             <SyntaxHighlighter language="yaml" style={atomDark}>
-              {prettyjson.render(JSON.parse(router.query.results as string))}
+              {prettyjson.render(historyItem.results)}
             </SyntaxHighlighter>
           ) : (
-            "Invalid 'results' query parameter."
+            "Invalid 'id' query parameter."
           )
         ) : (
-          "No 'results' query parameter provided."
+          "No 'id' query parameter provided."
         )
       ) : (
         'Loading...'

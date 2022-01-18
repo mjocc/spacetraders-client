@@ -13,10 +13,11 @@ import {
 import storage from 'redux-persist/lib/storage';
 import spaceTradersReducer from './slices/spaceTraders';
 import outcomeToastsReducer from './slices/outcomeToasts';
+import commandHistoryReducer from './slices/commandHistory';
 
 const persistConfig = {
   key: 'auth',
-  whitelist: ['spaceTraders'],
+  whitelist: ['spaceTraders', 'commandHistory'],
   version: 1,
   storage,
 };
@@ -24,6 +25,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   spaceTraders: spaceTradersReducer,
   outcomeToasts: outcomeToastsReducer,
+  commandHistory: commandHistoryReducer,
 });
 const reducer = persistReducer(persistConfig, rootReducer);
 
