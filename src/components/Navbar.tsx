@@ -1,17 +1,17 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FC, useState } from "react";
-import { Container, Dropdown, Navbar } from "react-bootstrap";
-import spaceTradersLogo from "../../public/spacetraders.svg";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { clearHistory } from "../store/slices/commandHistory";
-import { getManageToast } from "../store/slices/outcomeToasts";
+import Image from 'next/image';
+import Link from 'next/link';
+import { FC, useState } from 'react';
+import { Container, Dropdown, Navbar } from 'react-bootstrap';
+import spaceTradersLogo from '../../public/spacetraders.svg';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { clearHistory } from '../store/slices/commandHistory';
+import { getManageToast } from '../store/slices/outcomeToasts';
 import {
   logout,
   selectAuthenticated,
   selectUsername,
-} from "../store/slices/spaceTraders";
-import LogoutConfirmationModal from "./LogoutConfirmationModal";
+} from '../store/slices/spaceTraders';
+import LogoutConfirmationModal from './LogoutConfirmationModal';
 
 const CustomNavbar: FC = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +40,7 @@ const CustomNavbar: FC = () => {
           <>
             <Dropdown>
               <Dropdown.Toggle as={Navbar.Text}>
-                Logged in as{" "}
+                Logged in as{' '}
                 <span className="text-decoration-underline">{username}</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -55,7 +55,7 @@ const CustomNavbar: FC = () => {
               onConfirmation={() => {
                 dispatch(logout());
                 dispatch(clearHistory());
-                openToast("success", { success: "Logged out successfully." });
+                openToast('success', { success: 'Logged out successfully.' });
               }}
             />
           </>

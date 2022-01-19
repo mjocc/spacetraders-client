@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 interface SpaceTradersSlice {
   username: string | null;
@@ -12,7 +12,7 @@ const initialState: SpaceTradersSlice = {
 };
 
 const spaceTradersSlice = createSlice({
-  name: "spaceTraders",
+  name: 'spaceTraders',
   initialState,
   reducers: {
     initializeSpaceTraders(

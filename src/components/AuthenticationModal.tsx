@@ -1,30 +1,30 @@
-import { useRouter } from "next/router";
-import { FC, FormEventHandler, useEffect, useRef, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { useRouter } from 'next/router';
+import { FC, FormEventHandler, useEffect, useRef, useState } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
 import {
   handleFormChange,
   makeApiCall,
   viewCommandResults,
-} from "../lib/utils";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getManageToast } from "../store/slices/outcomeToasts";
+} from '../lib/utils';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { getManageToast } from '../store/slices/outcomeToasts';
 import {
   initializeSpaceTraders,
   selectAuthenticated,
-} from "../store/slices/spaceTraders";
+} from '../store/slices/spaceTraders';
 import {
   addHistoryItem,
   createHistoryItem,
-} from "../store/slices/commandHistory";
-import SubmitButton from "./SubmitButton";
+} from '../store/slices/commandHistory';
+import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
   const router = useRouter();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [claimingToken, setClaimingToken] = useState<boolean>(false);
 
-  const [username, setUsername] = useState<string>("");
-  const [token, setToken] = useState<string>("");
+  const [username, setUsername] = useState<string>('');
+  const [token, setToken] = useState<string>('');
 
   const dispatch = useAppDispatch();
   const { openToast } = getManageToast(dispatch);
@@ -43,21 +43,21 @@ const AuthenticationModal: FC = () => {
 
     const authenticate = (username: string, token: string) => {
       dispatch(initializeSpaceTraders({ username, token }));
-      setUsername("");
-      setToken("");
+      setUsername('');
+      setToken('');
     };
 
     if (claimingToken) {
-      const rawResponse = await makeApiCall("/api/claim-token", {
+      const rawResponse = await makeApiCall('/api/claim-token', {
         username,
       });
       const results = await rawResponse.json();
       if (rawResponse.status === 409 && results.message) {
-        openToast("error", { error: results.message });
+        openToast('error', { error: results.message });
       } else if (results.token) {
         authenticate(username, results.token);
         openToast(
-          "success",
+          'success',
           {
             success:
               "Username claimed successfully. Authenticated automatically. See 'Query results' for details.",
@@ -65,16 +65,16 @@ const AuthenticationModal: FC = () => {
           5000
         );
         const { id, historyItem } = createHistoryItem({
-          method: "GET",
+          method: 'GET',
           path: `/users/${username}/claim`,
-          body: "",
+          body: '',
           results,
         });
         dispatch(addHistoryItem(historyItem));
         viewCommandResults(router, id);
       }
     } else {
-      const rawResponse = await makeApiCall("/api/verify-credentials", {
+      const rawResponse = await makeApiCall('/api/verify-credentials', {
         username,
         token,
       });
@@ -82,9 +82,9 @@ const AuthenticationModal: FC = () => {
       if (results.validCredentials) {
         authenticate(username, token);
       }
-      openToast(results.validCredentials ? "success" : "error", {
-        success: "Authenticated successfully.",
-        error: "Invalid authentication information.",
+      openToast(results.validCredentials ? 'success' : 'error', {
+        success: 'Authenticated successfully.',
+        error: 'Invalid authentication information.',
       });
     }
 
@@ -104,8 +104,8 @@ const AuthenticationModal: FC = () => {
         <Modal.Header>
           <Modal.Title>
             {claimingToken
-              ? "Enter a username to claim it"
-              : "Enter authentication information"}
+              ? 'Enter a username to claim it'
+              : 'Enter authentication information'}
           </Modal.Title>
         </Modal.Header>
 
@@ -138,10 +138,10 @@ const AuthenticationModal: FC = () => {
               className="me-auto"
               onClick={handleClaimToken}
             >
-              {claimingToken ? "Enter details" : "Claim a username"}
+              {claimingToken ? 'Enter details' : 'Claim a username'}
             </Button>
             <SubmitButton submitting={submitting}>
-              {claimingToken ? "Claim" : "Submit"}
+              {claimingToken ? 'Claim' : 'Submit'}
             </SubmitButton>
           </Modal.Footer>
         </Form>

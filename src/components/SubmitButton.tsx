@@ -1,11 +1,11 @@
-import { FC, PropsWithChildren } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { FC, PropsWithChildren } from 'react';
+import { Button, Spinner } from 'react-bootstrap';
 
 const SubmitButton: FC<
   PropsWithChildren<{ variant?: string; submitting: boolean }>
 > = ({ variant, submitting, children }) => {
   return (
-    <Button variant={variant ? variant : "primary"} type="submit">
+    <Button variant={variant ? variant : 'primary'} type="submit">
       {submitting ? (
         <Spinner size="sm" animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
@@ -13,7 +13,7 @@ const SubmitButton: FC<
       ) : children ? (
         children
       ) : (
-        "Submit"
+        'Submit'
       )}
     </Button>
   );

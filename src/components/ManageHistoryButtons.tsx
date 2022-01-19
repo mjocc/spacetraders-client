@@ -28,13 +28,13 @@ const ManageHistoryButton: FC<PropsWithChildren<ManageHistoryButtonProps>> = (
 interface ManageHistoryButtonGroupProps {
   small?: boolean;
 }
-  // TODO: Add option to not show view results button like when on /command-results
+// TODO: Add option to not show view results button like when on /command-results
 
 const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
   small,
 }) => {
   const size = small ? 14 : 18;
-  // TODO: Make this work including a confirmation for removeItem - 
+  // TODO: Make this work including a confirmation for removeItem -
   // TODO:  give logout confirmation modal a similar api to toasts but first fix toasts
   const viewResults = () => viewCommandResults(router, id);
   const rerunCommand = () => {

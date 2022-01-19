@@ -1,5 +1,5 @@
-import Head from "next/head";
-import { FC } from "react";
+import Head from 'next/head';
+import { FC } from 'react';
 
 const ErrorPage: FC<{ errorCode: number; errorText: string }> = ({
   errorCode,
@@ -13,9 +13,9 @@ const ErrorPage: FC<{ errorCode: number; errorText: string }> = ({
     </Head>
     <div
       style={{
-        paddingTop: "58px",
-        paddingBottom: "122px",
-        paddingLeft: "calc(16.666667%)",
+        paddingTop: '58px',
+        paddingBottom: '122px',
+        paddingLeft: 'calc(16.666667%)',
         zIndex: -1,
       }}
       className="position-absolute d-flex top-0 start-0 w-100 h-100 justify-content-center align-items-center h-100 w-100"

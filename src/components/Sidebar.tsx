@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { NextRouter, useRouter } from "next/router";
-import { FC, PropsWithChildren } from "react";
-import { Nav, NavLinkProps } from "react-bootstrap";
+import Link from 'next/link';
+import { NextRouter, useRouter } from 'next/router';
+import { FC, PropsWithChildren } from 'react';
+import { Nav, NavLinkProps } from 'react-bootstrap';
 
 type CustomNavLinkProps = PropsWithChildren<{
   href: string;
