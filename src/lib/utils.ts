@@ -73,7 +73,7 @@ export const generateApiUrl = (
   params: { [key: string]: string } = {}
 ): string => {
   return (
-    process.env.SPACETRADERS_API_BASE_PATH +
+    process.env.NEXT_PUBLIC_API_PATH +
     path +
     '?' +
     new URLSearchParams(params)

@@ -90,7 +90,7 @@ const CommandBar: FC = () => {
                       overlay={
                         <Tooltip>
                           <a
-                            href={`${process.env.SPACETRADERS_API_BASE_PATH}`}
+                            href={`${process.env.NEXT_PUBLIC_API_PATH}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
