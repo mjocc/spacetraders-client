@@ -1,27 +1,18 @@
-import { FC } from 'react';
-import { useRouter } from 'next/router';
-import { AlertCircle, CheckCircle } from 'react-feather';
-import { runCommand, viewCommandResults } from '../lib/utils';
 import dateFormat from 'dateformat';
+import { useRouter } from 'next/router';
+import { FC } from 'react';
 import { Badge, ListGroupItem } from 'react-bootstrap';
-import ManageHistoryButtonGroup from './ManageHistoryButtons';
+import { AlertCircle, CheckCircle } from 'react-feather';
+import { viewCommandResults } from '../lib/utils';
 import { HistoryItem } from '../store/slices/commandHistory';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { selectToken } from '../store/slices/spaceTraders';
+import ManageHistoryButtonGroup from './ManageHistoryButtons';
 
 interface HistoryItemProps extends HistoryItem {}
 
-const HistoryItem: FC<HistoryItemProps> = ({
-  id,
-  method,
-  path,
-  datetime,
-  error,
-  body,
-}) => {
+const HistoryItem: FC<HistoryItemProps> = (props) => {
+  const { id, method, path, datetime, error } = props;
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const token = useAppSelector(selectToken);
+  const viewResults = () => viewCommandResults(router, id);
 
   return (
     <ListGroupItem key={id} as="a" role="button" onClick={viewResults}>
@@ -38,12 +29,7 @@ const HistoryItem: FC<HistoryItemProps> = ({
         {dateFormat(new Date(datetime), 'H:MM "on" dddd d, mmm yy')}
       </span>
       <span className="float-end">
-        <ManageHistoryButtonGroup
-          onResults={viewResults}
-          onRerun={rerunCommand}
-          onRemove={removeItem}
-          small
-        />
+        <ManageHistoryButtonGroup {...props} small />
       </span>
     </ListGroupItem>
   );

@@ -9,7 +9,7 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap';
-import { handleFormChange, runCommand } from '../lib/utils';
+import { handleFormChange, MethodType, runCommand } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import { selectToken } from '../store/slices/spaceTraders';
@@ -19,7 +19,7 @@ const CommandBar: FC = () => {
   const router = useRouter();
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  const [method, setMethod] = useState<'GET' | 'POST'>('GET');
+  const [method, setMethod] = useState<MethodType>('GET');
   const [path, setPath] = useState<string>('');
   const [body, setBody] = useState<string>('{ }');
 

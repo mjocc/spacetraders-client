@@ -9,7 +9,12 @@ import {
   selectMode,
 } from '../store/slices/outcomeToasts';
 
-export type OutcomeToastModes = null | 'success' | 'error';
+// TODO:
+// - [ ] Update this component to use new state values, selectors etc.
+// - [ ] Add rendering of multiple toasts from state list
+// - [ ] Work out how to get toasts to disappear after set amount of time
+// - [ ] Update all files that still use 'getManageToast'
+// - [ ] Make sure previous issue with many redux actions is not still present
 
 const OutcomeToasts: FC = () => {
   const containerProps = { style: { zIndex: 1060 }, className: 'p-3' };

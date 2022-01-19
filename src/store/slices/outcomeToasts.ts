@@ -1,100 +1,57 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { OutcomeToastModes } from '../../components/OutcomeToasts';
+import { createEntityAdapter, createSlice, nanoid } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '../store';
 
-interface OutcomeToastsSlice {
+type OutcomeToastModes = 'success' | 'error';
+
+interface OutcomeToastParams {
   mode: OutcomeToastModes;
-  successText: string;
-  errorText: string;
+  text: string;
   closeDelay: number;
 }
 
-const initialState: OutcomeToastsSlice = {
-  mode: null,
-  successText: 'Command successfully executed.',
-  errorText: 'Something went wrong. Please try again.',
-  closeDelay: 3000,
-};
-
-interface SetToastModeParams {
-  mode: OutcomeToastModes;
-  error?: string;
-  success?: string;
-  closeDelay?: number;
+interface OutcomeToast extends OutcomeToastParams {
+  id: string;
+  datetime: number;
 }
+
+//   successText: 'Command successfully executed.',
+//   errorText: 'Something went wrong. Please try again.',
+
+const outcomeToastAdapter = createEntityAdapter<OutcomeToast>({
+  sortComparer: (a, b) => a.datetime - b.datetime,
+});
 
 const outcomeToastsSlice = createSlice({
   name: 'outcomeToasts',
-  initialState,
+  initialState: outcomeToastAdapter.getInitialState(),
   reducers: {
-    setToastMode(
-      state,
-      {
-        payload: { mode, error, success, closeDelay },
-      }: PayloadAction<SetToastModeParams>
-    ) {
-      state.mode = mode;
-
-      if (error) {
-        state.errorText = error;
-      }
-      if (success) {
-        state.successText = success;
-      }
-      if (closeDelay) {
-        state.closeDelay = closeDelay;
-      }
-    },
-    closeToast(state) {
-      state.mode = initialState.mode;
-    },
-    resetToastDetails(state) {
-      state.successText = initialState.successText;
-      state.errorText = initialState.errorText;
-      state.closeDelay = initialState.closeDelay;
-    },
+    addToast: outcomeToastAdapter.addOne,
+    removeToast: outcomeToastAdapter.removeOne,
   },
 });
 
-const { setToastMode, closeToast, resetToastDetails } =
-  outcomeToastsSlice.actions;
+export const { addToast, removeToast } = outcomeToastsSlice.actions;
 
-const getOpenToast =
+export const createToast = (
+  mode: OutcomeToastModes,
+  text: string,
+  closeDelay: number
+): OutcomeToast => {
+  const id = nanoid();
+  const datetime = new Date().getTime();
+
+  return { id, datetime, mode, text, closeDelay };
+};
+
+export const getOpenToast =
   (dispatch: AppDispatch) =>
-  (
-    mode: OutcomeToastModes,
-    messages?: { error?: string; success?: string },
-    closeDelay?: number
-  ) => {
-    let params: SetToastModeParams = { mode };
-    if (messages) {
-      params = { ...params, ...messages };
-    }
-    if (closeDelay) {
-      params = { ...params, closeDelay };
-    }
+  (mode: OutcomeToastModes, text: string, closeDelay: number = 3000) =>
+    dispatch(addToast(createToast(mode, text, closeDelay)));
 
-    dispatch(setToastMode(params));
-  };
-const getCloseToast = (dispatch: AppDispatch) => () => {
-  dispatch(closeToast());
-  setTimeout(() => {
-    dispatch(resetToastDetails());
-  }, 150);
-};
-export const getManageToast = (dispatch: AppDispatch) => {
-  return {
-    openToast: getOpenToast(dispatch),
-    closeToast: getCloseToast(dispatch),
-  };
-};
-
-export const selectMode = (state: RootState) => state.outcomeToasts.mode;
-export const selectBodyText = (state: RootState) => ({
-  success: state.outcomeToasts.successText,
-  error: state.outcomeToasts.errorText,
-});
-export const selectCloseDelay = (state: RootState) =>
-  state.outcomeToasts.closeDelay;
+const outcomeToastSelectors = outcomeToastAdapter.getSelectors<RootState>(
+  (state) => state.outcomeToasts
+);
+export const selectOutcomeToasts = (state: RootState) =>
+  outcomeToastSelectors.selectAll(state);
 
 export default outcomeToastsSlice.reducer;

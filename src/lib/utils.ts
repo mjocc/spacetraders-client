@@ -90,7 +90,7 @@ export const viewCommandResults = (router: NextRouter, resultsId: string) => {
 
 interface RunCommandProps {
   router: NextRouter;
-  method: 'GET' | 'POST';
+  method: MethodType;
   path: string;
   body: string;
   token: string;
@@ -131,3 +131,5 @@ export const runCommand = async ({
     viewCommandResults(router, id);
   }
 };
+
+export type MethodType = 'GET' | 'POST';

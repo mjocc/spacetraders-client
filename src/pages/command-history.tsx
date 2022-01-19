@@ -11,7 +11,6 @@ import {
 import HistoryItem from '../components/HistoryItem';
 
 const CommmandHistory: NextPage = () => {
-  const dispatch = useAppDispatch();
   const history = useAppSelector(selectHistory);
   const historyChunks = _chunk(history, 10);
   const historyTotal = useAppSelector(selectHistoryTotal);

@@ -1,8 +1,9 @@
 import { createEntityAdapter, createSlice, nanoid } from '@reduxjs/toolkit';
+import { MethodType } from '../../lib/utils';
 import { RootState } from '../store';
 
 interface HistoryItemParams {
-  method: 'GET' | 'POST';
+  method: MethodType;
   path: string;
   body: string;
   results: any;
@@ -31,7 +32,9 @@ const commandHistorySlice = createSlice({
 export const { addHistoryItem, removeHistoryItem, clearHistory } =
   commandHistorySlice.actions;
 
-export const createHistoryItem = (params: HistoryItemParams) => {
+export const createHistoryItem = (
+  params: HistoryItemParams
+): { id: string; historyItem: HistoryItem } => {
   const id = nanoid();
   const datetime = new Date().getTime();
   const error = !!params.results.error;

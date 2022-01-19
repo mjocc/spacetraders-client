@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { FC, MouseEventHandler, PropsWithChildren } from 'react';
 import {
   Button,
@@ -7,6 +8,9 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { RefreshCw, Terminal, Trash } from 'react-feather';
+import { MethodType, runCommand, viewCommandResults } from '../lib/utils';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { selectToken } from '../store/slices/spaceTraders';
 
 interface ManageHistoryButtonProps extends ButtonProps {
   tooltipText: string;
@@ -26,16 +30,25 @@ const ManageHistoryButton: FC<PropsWithChildren<ManageHistoryButtonProps>> = (
 };
 
 interface ManageHistoryButtonGroupProps {
+  method: MethodType;
+  id: string;
+  path: string;
+  body: string;
   small?: boolean;
+  noViewResultsButton?: boolean;
 }
-// TODO: Add option to not show view results button like when on /command-results
 
 const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
+  method,
+  id,
+  path,
+  body,
   small,
+  noViewResultsButton,
 }) => {
-  const size = small ? 14 : 18;
-  // TODO: Make this work including a confirmation for removeItem -
-  // TODO:  give logout confirmation modal a similar api to toasts but first fix toasts
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const token = useAppSelector(selectToken);
   const viewResults = () => viewCommandResults(router, id);
   const rerunCommand = () => {
     if (token) {
@@ -49,13 +62,19 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
       });
     }
   };
+  // TODO: Make this work including a confirmation for removeItem -
+  // TODO:  give logout confirmation modal a similar api to toasts but first fix toasts
   const removeItem = () => {};
+
+  const size = small ? 14 : 18;
 
   return (
     <ButtonGroup aria-label="Basic example" size={small ? 'sm' : undefined}>
-      <ManageHistoryButton tooltipText="View results" onClick={viewResults}>
-        <Terminal size={size} />
-      </ManageHistoryButton>
+      {!noViewResultsButton && (
+        <ManageHistoryButton tooltipText="View results" onClick={viewResults}>
+          <Terminal size={size} />
+        </ManageHistoryButton>
+      )}
       <ManageHistoryButton tooltipText="Rerun command" onClick={rerunCommand}>
         <RefreshCw size={size} />
       </ManageHistoryButton>

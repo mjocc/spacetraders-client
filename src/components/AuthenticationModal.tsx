@@ -7,15 +7,15 @@ import {
   viewCommandResults,
 } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { getManageToast } from '../store/slices/outcomeToasts';
-import {
-  initializeSpaceTraders,
-  selectAuthenticated,
-} from '../store/slices/spaceTraders';
 import {
   addHistoryItem,
   createHistoryItem,
 } from '../store/slices/commandHistory';
+import { getOpenToast } from '../store/slices/outcomeToasts';
+import {
+  initializeSpaceTraders,
+  selectAuthenticated,
+} from '../store/slices/spaceTraders';
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
@@ -27,7 +27,7 @@ const AuthenticationModal: FC = () => {
   const [token, setToken] = useState<string>('');
 
   const dispatch = useAppDispatch();
-  const { openToast } = getManageToast(dispatch);
+  const openToast = getOpenToast(dispatch);
   const authenticated = useAppSelector(selectAuthenticated);
 
   const usernameField = useRef<HTMLInputElement>(null);
@@ -53,15 +53,12 @@ const AuthenticationModal: FC = () => {
       });
       const results = await rawResponse.json();
       if (rawResponse.status === 409 && results.message) {
-        openToast('error', { error: results.message });
+        openToast('error', results.message as string);
       } else if (results.token) {
         authenticate(username, results.token);
         openToast(
           'success',
-          {
-            success:
-              "Username claimed successfully. Authenticated automatically. See 'Query results' for details.",
-          },
+          "Username claimed successfully. Authenticated automatically. See 'Query results' for details.",
           5000
         );
         const { id, historyItem } = createHistoryItem({
@@ -82,10 +79,9 @@ const AuthenticationModal: FC = () => {
       if (results.validCredentials) {
         authenticate(username, token);
       }
-      openToast(results.validCredentials ? 'success' : 'error', {
-        success: 'Authenticated successfully.',
-        error: 'Invalid authentication information.',
-      });
+      results.validCredentials
+        ? openToast('success', 'Authenticated successfully.')
+        : openToast('error', 'Invalid authentication information.');
     }
 
     setSubmitting(false);
