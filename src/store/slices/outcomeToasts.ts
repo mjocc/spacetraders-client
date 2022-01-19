@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { OutcomeToastModes } from '../../components/OutcomeToasts';
-import { AppDispatch, RootState } from '../store';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { OutcomeToastModes } from "../../components/OutcomeToasts";
+import { AppDispatch, RootState } from "../store";
 
 interface OutcomeToastsSlice {
   mode: OutcomeToastModes;
@@ -11,8 +11,8 @@ interface OutcomeToastsSlice {
 
 const initialState: OutcomeToastsSlice = {
   mode: null,
-  successText: 'Command successfully executed.',
-  errorText: 'Something went wrong. Please try again.',
+  successText: "Command successfully executed.",
+  errorText: "Something went wrong. Please try again.",
   closeDelay: 3000,
 };
 
@@ -24,7 +24,7 @@ interface SetToastModeParams {
 }
 
 const outcomeToastsSlice = createSlice({
-  name: 'outcomeToasts',
+  name: "outcomeToasts",
   initialState,
   reducers: {
     setToastMode(

@@ -9,16 +9,8 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap';
-import {
-  handleFormChange,
-  makeApiCall,
-  viewCommandResults,
-} from '../lib/utils';
+import { handleFormChange, runCommand } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import {
-  addHistoryItem,
-  createHistoryItem,
-} from '../store/slices/commandHistory';
 import { getManageToast } from '../store/slices/outcomeToasts';
 import { selectToken } from '../store/slices/spaceTraders';
 import SubmitButton from './SubmitButton';
@@ -32,33 +24,25 @@ const CommandBar: FC = () => {
   const [body, setBody] = useState<string>('{ }');
 
   const dispatch = useAppDispatch();
-  const { openToast } = getManageToast(dispatch);
   const token = useAppSelector(selectToken);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-    const rawResponse = await makeApiCall('/api/run-command', {
-      method,
-      path,
-      body,
-      token,
-    });
-    const response = await rawResponse.json();
-    openToast(response.results ? 'success' : 'error');
-    if (response.results) {
-      const { id, historyItem } = createHistoryItem({
+    if (token) {
+      runCommand({
+        router,
         method,
         path,
         body,
-        results: response.results,
-        
+        token,
+        dispatch,
+        callback() {
+          setMethod('GET');
+          setPath('');
+          setBody('{ }');
+        },
       });
-      dispatch(addHistoryItem(historyItem));
-      setMethod('GET');
-      setPath('');
-      setBody('{ }')
-      viewCommandResults(router, id);
     }
     setSubmitting(false);
   };

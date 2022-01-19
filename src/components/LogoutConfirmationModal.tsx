@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { FC } from "react";
+import { Button, Modal } from "react-bootstrap";
 
 const LogoutConfirmationModal: FC<{
   show: boolean;

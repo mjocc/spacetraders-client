@@ -1,5 +1,5 @@
-import React, { FC, PropsWithChildren, ReactNode } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import React, { FC, PropsWithChildren, ReactNode } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 
 const Layout: FC<PropsWithChildren<{ sidebar: ReactNode }>> = ({
   sidebar,

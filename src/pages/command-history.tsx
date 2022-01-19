@@ -8,7 +8,7 @@ import {
   selectHistory,
   selectHistoryTotal,
 } from '../store/slices/commandHistory';
-import HistoryItem from '../components/HistoryItem'
+import HistoryItem from '../components/HistoryItem';
 
 const CommmandHistory: NextPage = () => {
   const dispatch = useAppDispatch();
@@ -24,13 +24,11 @@ const CommmandHistory: NextPage = () => {
         <title>Command History | SpaceTraders Client</title>
         <meta name="description" content="History of commands issued" />
       </Head>
-      <div className="d-block text-end mb-1">
-        {historyTotal} item(s)
-      </div>
+      <div className="d-block text-end mb-1">{historyTotal} item(s)</div>
       {historyChunks[chunkIndex] && (
         <ListGroup>
           {historyChunks[chunkIndex].map((historyItem) => (
-            <HistoryItem {...historyItem} />
+            <HistoryItem key={historyItem.id} {...historyItem} />
           ))}
         </ListGroup>
       )}

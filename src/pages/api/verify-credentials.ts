@@ -1,7 +1,7 @@
-import { generateApiHandler, generateApiUrl } from '../../lib/utils';
+import { generateApiHandler, generateApiUrl } from "../../lib/utils";
 
 const verifyCredentials = async (username: string, token: string) => {
-  const url = generateApiUrl('/my/account', { token });
+  const url = generateApiUrl("/my/account", { token });
   const rawResponse = await fetch(url);
   const results = await rawResponse.json();
   if (results.user) {
@@ -13,7 +13,7 @@ const verifyCredentials = async (username: string, token: string) => {
 };
 
 export default generateApiHandler<{ username: string; token: string }>(
-  ['username', 'token'],
+  ["username", "token"],
   async (req, res, { username, token }) => {
     const validCredentials = await verifyCredentials(username, token);
     res.status(200).json({ validCredentials });

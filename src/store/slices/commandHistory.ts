@@ -1,14 +1,14 @@
-import { createEntityAdapter, createSlice, nanoid } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { createEntityAdapter, createSlice, nanoid } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 interface HistoryItemParams {
-  method: 'GET' | 'POST';
+  method: "GET" | "POST";
   path: string;
   body: string;
   results: any;
 }
 
-interface HistoryItem extends HistoryItemParams {
+export interface HistoryItem extends HistoryItemParams {
   id: string;
   datetime: number;
   error: boolean;
@@ -19,7 +19,7 @@ const commandHistoryAdapter = createEntityAdapter<HistoryItem>({
 });
 
 const commandHistorySlice = createSlice({
-  name: 'commandHistory',
+  name: "commandHistory",
   initialState: commandHistoryAdapter.getInitialState(),
   reducers: {
     addHistoryItem: commandHistoryAdapter.addOne,
@@ -36,7 +36,7 @@ export const createHistoryItem = (params: HistoryItemParams) => {
   const datetime = new Date().getTime();
   const error = !!params.results.error;
 
-  return { id, historyItem: { id, datetime, error, ...params }};
+  return { id, historyItem: { id, datetime, error, ...params } };
 };
 
 const commandHistorySelectors = commandHistoryAdapter.getSelectors<RootState>(

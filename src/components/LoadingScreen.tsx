@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { FC } from "react";
+import { Spinner } from "react-bootstrap";
 
 const LoadingScreen: FC = () => {
   return (

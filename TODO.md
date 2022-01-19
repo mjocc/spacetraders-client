@@ -5,6 +5,7 @@ NOTE: SEE TODO COMMENTS ACROSS FILES
   - [ ] Make up arrow on keyboard when on command bar revert to previous command like in shell
   - [x] Have /command-results recieve an id prop which it uses to access the command id from redux
   - [ ] Improve pagination on /command-history
+  - [ ] Add view results/rerun command/delete entry icon buttons to history and results page with delete confirmation and tooltips
 - [ ] Add a rerun button to the command results page
 - [ ] Put API docs into popup iframe and move trigger button into button panel with command history button
-- [ ] Change toast system so it doesn't make so many unnecessary redux actions
+- [ ] Change toast system so it doesn't trigger so many unnecessary redux actions

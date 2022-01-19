@@ -1,16 +1,16 @@
-import 'bootswatch/dist/cyborg/bootstrap.min.css';
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import AuthenticationModal from '../components/AuthenticationModal';
-import CommandBar from '../components/CommandBar';
-import Layout from '../components/Layout';
-import LoadingScreen from '../components/LoadingScreen';
-import Navbar from '../components/Navbar';
-import OutcomeToasts from '../components/OutcomeToasts';
-import Sidebar from '../components/Sidebar';
-import store, { persistor } from '../store/store';
+import "bootswatch/dist/cyborg/bootstrap.min.css";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import AuthenticationModal from "../components/AuthenticationModal";
+import CommandBar from "../components/CommandBar";
+import Layout from "../components/Layout";
+import LoadingScreen from "../components/LoadingScreen";
+import Navbar from "../components/Navbar";
+import OutcomeToasts from "../components/OutcomeToasts";
+import Sidebar from "../components/Sidebar";
+import store, { persistor } from "../store/store";
 
 function App({ Component, pageProps }: AppProps) {
   return (

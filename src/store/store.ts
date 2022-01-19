@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
 import {
   FLUSH,
   PAUSE,
@@ -9,15 +9,15 @@ import {
   PURGE,
   REGISTER,
   REHYDRATE,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import spaceTradersReducer from './slices/spaceTraders';
-import outcomeToastsReducer from './slices/outcomeToasts';
-import commandHistoryReducer from './slices/commandHistory';
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import spaceTradersReducer from "./slices/spaceTraders";
+import outcomeToastsReducer from "./slices/outcomeToasts";
+import commandHistoryReducer from "./slices/commandHistory";
 
 const persistConfig = {
-  key: 'auth',
-  whitelist: ['spaceTraders', 'commandHistory'],
+  key: "auth",
+  whitelist: ["spaceTraders", "commandHistory"],
   version: 1,
   storage,
 };
