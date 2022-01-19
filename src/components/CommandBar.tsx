@@ -47,7 +47,7 @@ const CommandBar: FC = () => {
     const response = await rawResponse.json();
     openToast(response.results ? 'success' : 'error');
     if (response.results) {
-      const historyItem = createHistoryItem({
+      const { id, historyItem } = createHistoryItem({
         method,
         path,
         body,
@@ -57,7 +57,8 @@ const CommandBar: FC = () => {
       dispatch(addHistoryItem(historyItem));
       setMethod('GET');
       setPath('');
-      viewCommandResults(router, historyItem.id);
+      setBody('{ }')
+      viewCommandResults(router, id);
     }
     setSubmitting(false);
   };

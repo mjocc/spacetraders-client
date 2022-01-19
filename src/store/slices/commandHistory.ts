@@ -36,7 +36,7 @@ export const createHistoryItem = (params: HistoryItemParams) => {
   const datetime = new Date().getTime();
   const error = !!params.results.error;
 
-  return { id, datetime, error, ...params };
+  return { id, historyItem: { id, datetime, error, ...params }};
 };
 
 const commandHistorySelectors = commandHistoryAdapter.getSelectors<RootState>(

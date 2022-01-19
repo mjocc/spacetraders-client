@@ -1,22 +1,16 @@
 import _chunk from 'lodash/chunk';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Badge, ListGroup, Pagination } from 'react-bootstrap';
-import { AlertCircle, CheckCircle } from 'react-feather';
-import { viewCommandResults } from '../lib/utils';
+import { ListGroup, Pagination } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   selectHistory,
   selectHistoryTotal,
 } from '../store/slices/commandHistory';
-import dateFormat from 'dateformat';
+import HistoryItem from '../components/HistoryItem'
 
-interface CommandHistoryProps {}
-
-const CommmandHistory: NextPage<CommandHistoryProps> = () => {
-  const router = useRouter();
+const CommmandHistory: NextPage = () => {
   const dispatch = useAppDispatch();
   const history = useAppSelector(selectHistory);
   const historyChunks = _chunk(history, 10);
@@ -31,28 +25,12 @@ const CommmandHistory: NextPage<CommandHistoryProps> = () => {
         <meta name="description" content="History of commands issued" />
       </Head>
       <div className="d-block text-end mb-1">
-        {historyTotal} items
+        {historyTotal} item(s)
       </div>
       {historyChunks[chunkIndex] && (
         <ListGroup>
           {historyChunks[chunkIndex].map((historyItem) => (
-            <ListGroup.Item
-              key={historyItem.id}
-              as="a"
-              role="button"
-              onClick={() => viewCommandResults(router, historyItem.id)}
-            >
-              {historyItem.error ? (
-                <AlertCircle className="text-danger me-3" />
-              ) : (
-                <CheckCircle className="text-success me-3" />
-              )}
-              <Badge bg="info" className="me-3">{historyItem.method}</Badge>
-              <span >{historyItem.path}</span>
-              <span className="float-end">
-                {dateFormat(new Date(historyItem.datetime), 'H:MM "on" dddd d, mmm yy')}
-              </span>
-            </ListGroup.Item>
+            <HistoryItem {...historyItem} />
           ))}
         </ListGroup>
       )}

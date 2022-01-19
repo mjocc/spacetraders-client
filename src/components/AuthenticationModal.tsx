@@ -12,6 +12,7 @@ import {
   initializeSpaceTraders,
   selectAuthenticated,
 } from '../store/slices/spaceTraders';
+import { addHistoryItem, createHistoryItem } from '../store/slices/commandHistory'
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
@@ -56,7 +57,9 @@ const AuthenticationModal: FC = () => {
           success:
             "Username claimed successfully. Authenticated automatically. See 'Query results' for details.",
         }, 5000);
-        viewCommandResults(router, results);
+        const { id, historyItem } = createHistoryItem({ method: 'GET', path: `/users/${username}/claim`, body: '', results })
+        dispatch(addHistoryItem(historyItem))
+        viewCommandResults(router, id);
       }
     } else {
       const rawResponse = await makeApiCall('/api/verify-credentials', {
