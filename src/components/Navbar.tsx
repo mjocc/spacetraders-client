@@ -5,19 +5,19 @@ import { Container, Dropdown, Navbar } from 'react-bootstrap';
 import spaceTradersLogo from '../../public/spacetraders.svg';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { clearHistory } from '../store/slices/commandHistory';
-import { getManageToast } from '../store/slices/outcomeToasts';
+import { useToast } from '../store/slices/outcomeToasts';
 import {
   logout,
   selectAuthenticated,
   selectUsername,
 } from '../store/slices/spaceTraders';
-import LogoutConfirmationModal from './LogoutConfirmationModal';
+import ConfirmationModal from './ConfirmationModal';
 
 const CustomNavbar: FC = () => {
   const dispatch = useAppDispatch();
   const authenticated = useAppSelector(selectAuthenticated);
   const username = useAppSelector(selectUsername);
-  const { openToast } = getManageToast(dispatch);
+  const { openToast } = useToast();
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const handleClose = () => setShowModal(false);
@@ -49,15 +49,20 @@ const CustomNavbar: FC = () => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <LogoutConfirmationModal
+            <ConfirmationModal
               show={showModal}
+              title="Logout confirmation"
+              buttonText="Logout"
               handleClose={handleClose}
               onConfirmation={() => {
                 dispatch(logout());
                 dispatch(clearHistory());
-                openToast('success', { success: 'Logged out successfully.' });
+                openToast('success', 'Logged out successfully.');
               }}
-            />
+            >
+              Are you sure you want to log out? You&apos;ll have to enter your
+              username and token again and your history will be cleared.
+            </ConfirmationModal>
           </>
         )}
       </Container>

@@ -1,55 +1,58 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import { AlertCircle, CheckCircle } from 'react-feather';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppSelector } from '../store/hooks';
 import {
-  getManageToast,
-  selectBodyText,
-  selectCloseDelay,
-  selectMode,
+  OutcomeToastModes,
+  selectOutcomeToasts,
+  useToast,
 } from '../store/slices/outcomeToasts';
 
-// TODO:
-// - [ ] Update this component to use new state values, selectors etc.
-// - [ ] Add rendering of multiple toasts from state list
-// - [ ] Work out how to get toasts to disappear after set amount of time
-// - [ ] Update all files that still use 'getManageToast'
-// - [ ] Make sure previous issue with many redux actions is not still present
+// TODO: Make sure previous issue with many redux actions is not still present
 
-const OutcomeToasts: FC = () => {
-  const containerProps = { style: { zIndex: 1060 }, className: 'p-3' };
+interface OutcomeToastProps {
+  mode: OutcomeToastModes;
+  id: string;
+  text: string;
+}
 
-  const dispatch = useAppDispatch();
-  const mode = useAppSelector(selectMode);
-  const bodyText = useAppSelector(selectBodyText);
-  const closeDelay = useAppSelector(selectCloseDelay);
-  const { closeToast } = getManageToast(dispatch);
+const OutcomeToast: FC<OutcomeToastProps> = ({ mode, id, text }) => {
+  const { closeToast } = useToast();
+  const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
-    if (mode !== null) {
-      setTimeout(() => closeToast(), closeDelay);
-    }
-  }, [mode, closeToast, closeDelay]);
+    setShow(true);
+  }, []);
 
   return (
-    <>
-      <ToastContainer position="top-end" {...containerProps}>
-        <Toast show={mode === 'success'} onClose={() => closeToast()}>
-          <Toast.Header>
+    <Toast show={show} onClose={() => closeToast(id)}>
+      <Toast.Header>
+        {mode === 'success' ? (
+          <>
             <CheckCircle className="text-success me-2" />
             <strong className="me-auto">Success</strong>
-          </Toast.Header>
-          <Toast.Body>{bodyText.success}</Toast.Body>
-        </Toast>
-        <Toast show={mode === 'error'} onClose={() => closeToast()}>
-          <Toast.Header>
+          </>
+        ) : (
+          <>
             <AlertCircle className="text-danger me-2" />
             <strong className="me-auto">Error</strong>
-          </Toast.Header>
-          <Toast.Body>{bodyText.error}</Toast.Body>
-        </Toast>
-      </ToastContainer>
-    </>
+          </>
+        )}
+      </Toast.Header>
+      <Toast.Body>{text}</Toast.Body>
+    </Toast>
+  );
+};
+
+const OutcomeToasts: FC = () => {
+  const toasts = useAppSelector(selectOutcomeToasts);
+
+  return (
+    <ToastContainer position="top-end" style={{ zIndex: 1060 }} className="p-3">
+      {toasts.map(({ mode, id, text }) => (
+        <OutcomeToast key={id} mode={mode} id={id} text={text} />
+      ))}
+    </ToastContainer>
   );
 };
 

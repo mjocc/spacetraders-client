@@ -1,18 +1,17 @@
 import dateFormat from 'dateformat';
-import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { Badge, ListGroupItem } from 'react-bootstrap';
 import { AlertCircle, CheckCircle } from 'react-feather';
-import { viewCommandResults } from '../lib/utils';
+import { useViewCommandResults } from '../lib/utils';
 import { HistoryItem } from '../store/slices/commandHistory';
 import ManageHistoryButtonGroup from './ManageHistoryButtons';
 
 interface HistoryItemProps extends HistoryItem {}
 
 const HistoryItem: FC<HistoryItemProps> = (props) => {
+  const viewCommandResults = useViewCommandResults();
   const { id, method, path, datetime, error } = props;
-  const router = useRouter();
-  const viewResults = () => viewCommandResults(router, id);
+  const viewResults = () => viewCommandResults(id);
 
   return (
     <ListGroupItem key={id} as="a" role="button" onClick={viewResults}>

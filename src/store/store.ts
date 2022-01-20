@@ -11,9 +11,9 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import spaceTradersReducer from './slices/spaceTraders';
-import outcomeToastsReducer from './slices/outcomeToasts';
 import commandHistoryReducer from './slices/commandHistory';
+import outcomeToastsReducer from './slices/outcomeToasts';
+import spaceTradersReducer from './slices/spaceTraders';
 
 const persistConfig = {
   key: 'auth',

@@ -1,17 +1,16 @@
-import { useRouter } from 'next/router';
 import { FC, FormEventHandler, useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
   handleFormChange,
   makeApiCall,
-  viewCommandResults,
+  useViewCommandResults,
 } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   addHistoryItem,
   createHistoryItem,
 } from '../store/slices/commandHistory';
-import { getOpenToast } from '../store/slices/outcomeToasts';
+import { useToast } from '../store/slices/outcomeToasts';
 import {
   initializeSpaceTraders,
   selectAuthenticated,
@@ -19,7 +18,7 @@ import {
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
-  const router = useRouter();
+  const viewCommandResults = useViewCommandResults();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [claimingToken, setClaimingToken] = useState<boolean>(false);
 
@@ -27,7 +26,7 @@ const AuthenticationModal: FC = () => {
   const [token, setToken] = useState<string>('');
 
   const dispatch = useAppDispatch();
-  const openToast = getOpenToast(dispatch);
+  const { openToast } = useToast();
   const authenticated = useAppSelector(selectAuthenticated);
 
   const usernameField = useRef<HTMLInputElement>(null);
@@ -68,7 +67,7 @@ const AuthenticationModal: FC = () => {
           results,
         });
         dispatch(addHistoryItem(historyItem));
-        viewCommandResults(router, id);
+        viewCommandResults(id);
       }
     } else {
       const rawResponse = await makeApiCall('/api/verify-credentials', {

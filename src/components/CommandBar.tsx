@@ -1,42 +1,29 @@
-import { useRouter } from 'next/router';
 import { FC, FormEventHandler, useState } from 'react';
-import {
-  Col,
-  Container,
-  Form,
-  InputGroup,
-  OverlayTrigger,
-  Row,
-  Tooltip,
-} from 'react-bootstrap';
-import { handleFormChange, MethodType, runCommand } from '../lib/utils';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { getManageToast } from '../store/slices/outcomeToasts';
+import { Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
+import { handleFormChange, MethodType, useRunCommand } from '../lib/utils';
+import { useAppSelector } from '../store/hooks';
 import { selectToken } from '../store/slices/spaceTraders';
+import ApiDocsPopover from './ApiDocsPopover';
 import SubmitButton from './SubmitButton';
 
 const CommandBar: FC = () => {
-  const router = useRouter();
+  const runCommand = useRunCommand();
+  const token = useAppSelector(selectToken);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   const [method, setMethod] = useState<MethodType>('GET');
   const [path, setPath] = useState<string>('');
   const [body, setBody] = useState<string>('{ }');
 
-  const dispatch = useAppDispatch();
-  const token = useAppSelector(selectToken);
-
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     setSubmitting(true);
     if (token) {
       runCommand({
-        router,
         method,
         path,
         body,
         token,
-        dispatch,
         callback() {
           setMethod('GET');
           setPath('');
@@ -49,7 +36,11 @@ const CommandBar: FC = () => {
 
   return (
     <>
-      <Container className="position-absolute bottom-0 start-0 end-0" fluid>
+      <Container
+        style={{ zIndex: 1000 }}
+        className="position-absolute bottom-0 start-0 end-0"
+        fluid
+      >
         <div className="px-4 pt-3 pb-1 m-2 mb-4 rounded-3 border border-primary">
           <Form onSubmit={handleSubmit}>
             <Row>
@@ -69,25 +60,11 @@ const CommandBar: FC = () => {
               <Col xs={method === 'POST' ? 5 : 9}>
                 <Form.Group controlId="command-bar-path-field">
                   <InputGroup>
-                    <OverlayTrigger
-                      placement="top"
-                      delay={{ show: 250, hide: 1000 }}
-                      overlay={
-                        <Tooltip>
-                          <a
-                            href={`${process.env.NEXT_PUBLIC_API_PATH}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            API docs
-                          </a>
-                        </Tooltip>
-                      }
-                    >
+                    <ApiDocsPopover>
                       <InputGroup.Text id="api-url-prefix">
                         api.spacetraders.io
                       </InputGroup.Text>
-                    </OverlayTrigger>
+                    </ApiDocsPopover>
                     <Form.Control
                       type="text"
                       aria-describedby="api-url-prefix"

@@ -1,7 +1,8 @@
 import { createEntityAdapter, createSlice, nanoid } from '@reduxjs/toolkit';
-import { AppDispatch, RootState } from '../store';
+import { useAppDispatch } from '../hooks';
+import { RootState } from '../store';
 
-type OutcomeToastModes = 'success' | 'error';
+export type OutcomeToastModes = 'success' | 'error';
 
 interface OutcomeToastParams {
   mode: OutcomeToastModes;
@@ -13,9 +14,6 @@ interface OutcomeToast extends OutcomeToastParams {
   id: string;
   datetime: number;
 }
-
-//   successText: 'Command successfully executed.',
-//   errorText: 'Something went wrong. Please try again.',
 
 const outcomeToastAdapter = createEntityAdapter<OutcomeToast>({
   sortComparer: (a, b) => a.datetime - b.datetime,
@@ -30,7 +28,7 @@ const outcomeToastsSlice = createSlice({
   },
 });
 
-export const { addToast, removeToast } = outcomeToastsSlice.actions;
+const { addToast, removeToast } = outcomeToastsSlice.actions;
 
 export const createToast = (
   mode: OutcomeToastModes,
@@ -43,10 +41,27 @@ export const createToast = (
   return { id, datetime, mode, text, closeDelay };
 };
 
-export const getOpenToast =
-  (dispatch: AppDispatch) =>
-  (mode: OutcomeToastModes, text: string, closeDelay: number = 3000) =>
-    dispatch(addToast(createToast(mode, text, closeDelay)));
+export const useToast = () => {
+  const dispatch = useAppDispatch();
+
+  const openToast = (
+    mode: OutcomeToastModes,
+    text: string,
+    closeDelay: number = 3000
+  ) => {
+    const toast = createToast(mode, text, closeDelay);
+    dispatch(addToast(toast));
+    setTimeout(() => {
+      dispatch(removeToast(toast.id));
+    }, closeDelay);
+  };
+
+  const closeToast = (id: string) => {
+    dispatch(removeToast(id));
+  };
+
+  return { openToast, closeToast };
+};
 
 const outcomeToastSelectors = outcomeToastAdapter.getSelectors<RootState>(
   (state) => state.outcomeToasts

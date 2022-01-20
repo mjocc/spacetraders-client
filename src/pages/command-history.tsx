@@ -3,12 +3,12 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import { ListGroup, Pagination } from 'react-bootstrap';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import HistoryItem from '../components/HistoryItem';
+import { useAppSelector } from '../store/hooks';
 import {
   selectHistory,
   selectHistoryTotal,
 } from '../store/slices/commandHistory';
-import HistoryItem from '../components/HistoryItem';
 
 const CommmandHistory: NextPage = () => {
   const history = useAppSelector(selectHistory);

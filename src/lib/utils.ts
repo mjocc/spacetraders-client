@@ -1,12 +1,12 @@
 import _every from 'lodash/every';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { NextRouter } from 'next/router';
+import { useRouter } from 'next/router';
+import { useAppDispatch } from '../store/hooks';
 import {
   addHistoryItem,
   createHistoryItem,
 } from '../store/slices/commandHistory';
-import { getManageToast } from '../store/slices/outcomeToasts';
-import { AppDispatch } from '../store/store';
+import { useToast } from '../store/slices/outcomeToasts';
 
 export const isValidJson = (jsonString: string): boolean => {
   try {
@@ -83,53 +83,57 @@ export const generateApiUrl = (
   );
 };
 
-export const viewCommandResults = (router: NextRouter, resultsId: string) => {
-  const url = '/command-results?' + new URLSearchParams({ id: resultsId });
-  router.push(url);
+export const useViewCommandResults = () => {
+  const router = useRouter();
+  return (resultsId: string) => {
+    const url = '/command-results?' + new URLSearchParams({ id: resultsId });
+    router.push(url);
+  };
 };
 
 interface RunCommandProps {
-  router: NextRouter;
   method: MethodType;
   path: string;
   body: string;
   token: string;
-  dispatch: AppDispatch;
   callback?: () => void;
 }
 
-export const runCommand = async ({
-  router,
-  method,
-  path,
-  body,
-  token,
-  dispatch,
-  callback: cb,
-}: RunCommandProps) => {
-  const { openToast } = getManageToast(dispatch);
-
-  const rawResponse = await makeApiCall('/api/run-command', {
+export const useRunCommand = () => {
+  const dispatch = useAppDispatch();
+  const { openToast } = useToast();
+  const viewCommandResults = useViewCommandResults();
+  return async ({
     method,
     path,
     body,
     token,
-  });
-  const response = await rawResponse.json();
-  openToast(response.results ? 'success' : 'error');
-  if (response.results) {
-    const { id, historyItem } = createHistoryItem({
+    callback: cb,
+  }: RunCommandProps) => {
+    const rawResponse = await makeApiCall('/api/run-command', {
       method,
       path,
       body,
-      results: response.results,
+      token,
     });
-    dispatch(addHistoryItem(historyItem));
-    if (cb) {
-      cb();
+    const response = await rawResponse.json();
+    response.results
+      ? openToast('success', 'Command successfully executed.')
+      : openToast('error', 'Something went wrong. Please try again.');
+    if (response.results) {
+      const { id, historyItem } = createHistoryItem({
+        method,
+        path,
+        body,
+        results: response.results,
+      });
+      dispatch(addHistoryItem(historyItem));
+      if (cb) {
+        cb();
+      }
+      viewCommandResults(id);
     }
-    viewCommandResults(router, id);
-  }
+  };
 };
 
 export type MethodType = 'GET' | 'POST';

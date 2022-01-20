@@ -1,5 +1,4 @@
-import { useRouter } from 'next/router';
-import { FC, MouseEventHandler, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import {
   Button,
   ButtonGroup,
@@ -8,8 +7,9 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { RefreshCw, Terminal, Trash } from 'react-feather';
-import { MethodType, runCommand, viewCommandResults } from '../lib/utils';
+import { MethodType, useRunCommand, useViewCommandResults } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useToast } from '../store/slices/outcomeToasts';
 import { selectToken } from '../store/slices/spaceTraders';
 
 interface ManageHistoryButtonProps extends ButtonProps {
@@ -46,25 +46,29 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
   small,
   noViewResultsButton,
 }) => {
-  const router = useRouter();
   const dispatch = useAppDispatch();
+  const runCommand = useRunCommand();
+  const viewCommandResults = useViewCommandResults();
+  const { openToast } = useToast();
   const token = useAppSelector(selectToken);
-  const viewResults = () => viewCommandResults(router, id);
+
+  const viewResults = () => viewCommandResults(id);
   const rerunCommand = () => {
     if (token) {
       runCommand({
-        router,
         method,
         path,
         body,
         token,
-        dispatch,
       });
     }
   };
   // TODO: Make this work including a confirmation for removeItem -
   // TODO:  give logout confirmation modal a similar api to toasts but first fix toasts
-  const removeItem = () => {};
+  const removeItem = () => {
+    // dispatch(removeHistoryItem(id));
+    // openToast('success', '');
+  };
 
   const size = small ? 14 : 18;
 

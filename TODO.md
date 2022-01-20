@@ -8,4 +8,5 @@
   - [x] Have /command-results recieve an id prop which it uses to access the command id from redux
   - [ ] Improve pagination on /command-history
 - [ ] Add view results/rerun command/delete entry icon buttons to history and results page with delete confirmation and tooltips
-- [ ] Put API docs into popup iframe and move trigger button into button panel with command history button
+- [ ] ~~Put API docs into popup iframe~~ and move trigger button into button panel with command history button
+- [ ] Add format and lint commit hooks with husky
