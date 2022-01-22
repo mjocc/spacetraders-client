@@ -109,8 +109,16 @@ export const useRunCommand = (token: string | null, showBack?: boolean) => {
   const dispatch = useAppDispatch();
   const { openToast } = useToast();
   const viewCommandResults = useViewCommandResults(!!showBack);
-  return async ({ method, path, body, setRunning, callback: cb, successMessage, errorMessage }: RunCommandProps) => {
-    setRunning && setRunning(true)
+  return async ({
+    method,
+    path,
+    body,
+    setRunning,
+    callback: cb,
+    successMessage,
+    errorMessage,
+  }: RunCommandProps) => {
+    setRunning && setRunning(true);
     if (token) {
       const rawResponse = await makeApiCall('/api/run-command', {
         method,
@@ -120,8 +128,14 @@ export const useRunCommand = (token: string | null, showBack?: boolean) => {
       });
       const response = await rawResponse.json();
       response.results
-        ? openToast('success', successMessage || 'Command successfully executed.')
-        : openToast('error', errorMessage || 'Something went wrong. Please try again.');
+        ? openToast(
+            'success',
+            successMessage || 'Command successfully executed.'
+          )
+        : openToast(
+            'error',
+            errorMessage || 'Something went wrong. Please try again.'
+          );
       if (response.results) {
         const { id, historyItem } = createHistoryItem({
           method,
@@ -130,9 +144,9 @@ export const useRunCommand = (token: string | null, showBack?: boolean) => {
           results: response.results,
         });
         dispatch(addHistoryItem(historyItem));
-        cb && cb()
+        cb && cb();
         viewCommandResults(id);
-        setRunning && setRunning(false)
+        setRunning && setRunning(false);
       }
     } else {
       throw Error('no token provided');

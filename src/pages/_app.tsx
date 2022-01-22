@@ -1,5 +1,4 @@
 import 'bootswatch/dist/cyborg/bootstrap.min.css';
-import '../styles/animations.scss'
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
@@ -12,6 +11,7 @@ import Navbar from '../components/Navbar';
 import OutcomeToasts from '../components/OutcomeToasts';
 import Sidebar from '../components/Sidebar';
 import store, { persistor } from '../store/store';
+import '../styles/animations.scss';
 
 function App({ Component, pageProps }: AppProps) {
   return (

@@ -34,7 +34,7 @@ const AuthenticationModal: FC = () => {
     if (!authenticated) {
       router.push('/');
     }
-  }, [authenticated]);
+  }, [authenticated, router]);
 
   const usernameField = useRef<HTMLInputElement>(null);
   useEffect(() => {

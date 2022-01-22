@@ -105,7 +105,7 @@ const CommandBar: FC = () => {
                   <div className="d-grid">
                     <ButtonGroup>
                       <SubmitButton submitting={submitting} />
-                      <Link href="/command-history">
+                      <Link href="/command-history" passHref>
                         <Button variant="secondary">History</Button>
                       </Link>
                     </ButtonGroup>
@@ -129,15 +129,15 @@ const CommandBar: FC = () => {
       </Collapse>
       <Fade in={openButton} onExited={() => setOpenBar(true)}>
         <div className="position-absolute end-0 bottom-0 pb-4 pe-4">
-        <Tooltip tooltipText="Show command bar">
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setOpenButton(false);
-            }}
-          >
-            <ChevronUp />
-          </Button>
+          <Tooltip tooltipText="Show command bar">
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setOpenButton(false);
+              }}
+            >
+              <ChevronUp />
+            </Button>
           </Tooltip>
         </div>
       </Fade>

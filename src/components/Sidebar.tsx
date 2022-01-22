@@ -8,7 +8,12 @@ type CustomNavLinkProps = PropsWithChildren<{
   hiddenUntilActive?: boolean;
 }>;
 
-const NavLink: FC<CustomNavLinkProps> = ({ href, hiddenUntilActive, children, ...linkProps }) => {
+const NavLink: FC<CustomNavLinkProps> = ({
+  href,
+  hiddenUntilActive,
+  children,
+  ...linkProps
+}) => {
   const router = useRouter();
 
   return (

@@ -45,7 +45,7 @@ const ViewCommandResult: NextPage = () => {
 
       <Stack direction="horizontal" className="mb-2" gap={2}>
         {back && (
-          <Link href="/command-history">
+          <Link href="/command-history" passHref>
             <ArrowLeft role="button" size={28} />
           </Link>
         )}
@@ -63,12 +63,12 @@ const ViewCommandResult: NextPage = () => {
             </SyntaxHighlighter>
           ) : (
             <span>
-              Invalid 'id' query parameter. The history item may have been
-              deleted.
+              Invalid &lsquo;id&rsquo; query parameter. The history item may
+              have been deleted.
             </span>
           )
         ) : (
-          <span>No 'id' query parameter provided.</span>
+          <span>No &lsquo;id&rsquo; query parameter provided.</span>
         )
       ) : (
         <span>Loading...</span>
