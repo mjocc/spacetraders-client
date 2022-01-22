@@ -1,5 +1,11 @@
 import { useRouter } from 'next/router';
-import { FC, MouseEventHandler, PropsWithChildren, useState } from 'react';
+import {
+  Dispatch,
+  FC,
+  MouseEventHandler,
+  PropsWithChildren,
+  SetStateAction, useState
+} from 'react';
 import { Button, ButtonGroup, ButtonProps } from 'react-bootstrap';
 import { RefreshCw, Trash } from 'react-feather';
 import { MethodType, useRunCommand } from '../lib/utils';
@@ -34,6 +40,7 @@ interface ManageHistoryButtonGroupProps {
   path: string;
   body: string;
   className?: string;
+  setModalOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
@@ -42,6 +49,7 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
   path,
   body,
   className,
+  setModalOpen,
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -61,16 +69,17 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
       successMessage: 'Command successfully rerun.',
     });
   };
-  // TODO: Make this work including a confirmation for removeItem -
-  //  currently clicking anywhere triggers opening of results
+
   const removeItemConfirmation: MouseEventHandler = (event) => {
     event.stopPropagation();
     setShowConfirmation(true);
+    setModalOpen && setModalOpen(true)
   };
 
   const removeItem = () => {
+    setModalOpen && setModalOpen(false)
     dispatch(removeHistoryItem(id));
-    openToast('success', '');
+    openToast('success', 'History item successfully deleted.');
     router.push('/command-history');
   };
 
@@ -92,7 +101,7 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
         title="Removal confirmation"
         buttonText="Remove"
         handleClose={() => setShowConfirmation(false)}
-        onConfirmation={() => {}}
+        onConfirmation={removeItem}
       >
         Are you sure you want to remove the item from history? This is
         irreversible.

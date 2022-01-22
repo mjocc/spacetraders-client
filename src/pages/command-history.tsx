@@ -12,10 +12,10 @@ import {
 
 const CommmandHistory: NextPage = () => {
   const history = useAppSelector(selectHistory);
-  const historyChunks = _chunk(history, 10);
   const historyTotal = useAppSelector(selectHistoryTotal);
-
+  const historyChunks = _chunk(history, 10);
   const [chunkIndex, setChunkIndex] = useState<number>(0);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -31,7 +31,12 @@ const CommmandHistory: NextPage = () => {
           {historyChunks[chunkIndex] && (
             <ListGroup style={{ height: '481px' }}>
               {historyChunks[chunkIndex].map((historyItem) => (
-                <HistoryItem key={historyItem.id} {...historyItem} />
+                <HistoryItem
+                  key={historyItem.id}
+                  {...historyItem}
+                  stopClickEvents={modalOpen}
+                  setModalOpen={setModalOpen}
+                />
               ))}
             </ListGroup>
           )}

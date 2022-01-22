@@ -1,20 +1,27 @@
 import dateFormat from 'dateformat';
-import { FC } from 'react';
+import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 import { Badge, ListGroupItem, Stack } from 'react-bootstrap';
 import { AlertCircle, CheckCircle } from 'react-feather';
 import { useViewCommandResults } from '../lib/utils';
 import { HistoryItem } from '../store/slices/commandHistory';
 import ManageHistoryButtonGroup from './ManageHistoryButtons';
 
-interface HistoryItemProps extends HistoryItem {}
+interface HistoryItemProps extends HistoryItem {
+  stopClickEvents?: boolean;
+  setModalOpen?: Dispatch<SetStateAction<boolean>>;
+}
 
 const HistoryItem: FC<HistoryItemProps> = (props) => {
   const viewCommandResults = useViewCommandResults(true);
-  const { id, method, path, datetime, error } = props;
+  const { id, method, path, datetime, error, stopClickEvents } = props;
   const viewResults = () => viewCommandResults(id);
 
   return (
-    <ListGroupItem key={id} action onClick={(e) => console.log(e)}>
+    <ListGroupItem
+      key={id}
+      action
+      onClick={stopClickEvents ? undefined : viewResults}
+    >
       <Stack direction="horizontal">
         <div>
           {error ? (
