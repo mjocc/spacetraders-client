@@ -1,6 +1,7 @@
 import _every from 'lodash/every';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { useRouter } from 'next/router';
+import { Dispatch, SetStateAction } from 'react';
 import { useAppDispatch } from '../store/hooks';
 import {
   addHistoryItem,
@@ -83,10 +84,13 @@ export const generateApiUrl = (
   );
 };
 
-export const useViewCommandResults = () => {
+export const useViewCommandResults = (showBack?: boolean) => {
   const router = useRouter();
   return (resultsId: string) => {
-    const url = '/command-results?' + new URLSearchParams({ id: resultsId });
+    const params: { id: string } | { id: string; back: string } = showBack
+      ? { id: resultsId, back: 'true' }
+      : { id: resultsId };
+    const url = '/command-results?' + new URLSearchParams(params);
     router.push(url);
   };
 };
@@ -95,43 +99,43 @@ interface RunCommandProps {
   method: MethodType;
   path: string;
   body: string;
-  token: string;
+  setRunning?: Dispatch<SetStateAction<boolean>>;
   callback?: () => void;
+  successMessage?: string;
+  errorMessage?: string;
 }
 
-export const useRunCommand = () => {
+export const useRunCommand = (token: string | null, showBack?: boolean) => {
   const dispatch = useAppDispatch();
   const { openToast } = useToast();
-  const viewCommandResults = useViewCommandResults();
-  return async ({
-    method,
-    path,
-    body,
-    token,
-    callback: cb,
-  }: RunCommandProps) => {
-    const rawResponse = await makeApiCall('/api/run-command', {
-      method,
-      path,
-      body,
-      token,
-    });
-    const response = await rawResponse.json();
-    response.results
-      ? openToast('success', 'Command successfully executed.')
-      : openToast('error', 'Something went wrong. Please try again.');
-    if (response.results) {
-      const { id, historyItem } = createHistoryItem({
+  const viewCommandResults = useViewCommandResults(!!showBack);
+  return async ({ method, path, body, setRunning, callback: cb, successMessage, errorMessage }: RunCommandProps) => {
+    setRunning && setRunning(true)
+    if (token) {
+      const rawResponse = await makeApiCall('/api/run-command', {
         method,
         path,
         body,
-        results: response.results,
+        token,
       });
-      dispatch(addHistoryItem(historyItem));
-      if (cb) {
-        cb();
+      const response = await rawResponse.json();
+      response.results
+        ? openToast('success', successMessage || 'Command successfully executed.')
+        : openToast('error', errorMessage || 'Something went wrong. Please try again.');
+      if (response.results) {
+        const { id, historyItem } = createHistoryItem({
+          method,
+          path,
+          body,
+          results: response.results,
+        });
+        dispatch(addHistoryItem(historyItem));
+        cb && cb()
+        viewCommandResults(id);
+        setRunning && setRunning(false)
       }
-      viewCommandResults(id);
+    } else {
+      throw Error('no token provided');
     }
   };
 };

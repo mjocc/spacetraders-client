@@ -8,8 +8,6 @@ import {
   useToast,
 } from '../store/slices/outcomeToasts';
 
-// TODO: Make sure previous issue with many redux actions is not still present
-
 interface OutcomeToastProps {
   mode: OutcomeToastModes;
   id: string;

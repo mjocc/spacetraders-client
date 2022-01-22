@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { FC, FormEventHandler, useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
@@ -18,6 +19,7 @@ import {
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
+  const router = useRouter();
   const viewCommandResults = useViewCommandResults();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [claimingToken, setClaimingToken] = useState<boolean>(false);
@@ -28,6 +30,11 @@ const AuthenticationModal: FC = () => {
   const dispatch = useAppDispatch();
   const { openToast } = useToast();
   const authenticated = useAppSelector(selectAuthenticated);
+  useEffect(() => {
+    if (!authenticated) {
+      router.push('/');
+    }
+  }, [authenticated]);
 
   const usernameField = useRef<HTMLInputElement>(null);
   useEffect(() => {

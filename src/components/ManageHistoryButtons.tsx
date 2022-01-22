@@ -1,31 +1,30 @@
-import { FC, PropsWithChildren } from 'react';
-import {
-  Button,
-  ButtonGroup,
-  ButtonProps,
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
-import { RefreshCw, Terminal, Trash } from 'react-feather';
-import { MethodType, useRunCommand, useViewCommandResults } from '../lib/utils';
+import { useRouter } from 'next/router';
+import { FC, MouseEventHandler, PropsWithChildren, useState } from 'react';
+import { Button, ButtonGroup, ButtonProps } from 'react-bootstrap';
+import { RefreshCw, Trash } from 'react-feather';
+import { MethodType, useRunCommand } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { removeHistoryItem } from '../store/slices/commandHistory';
 import { useToast } from '../store/slices/outcomeToasts';
 import { selectToken } from '../store/slices/spaceTraders';
+import ConfirmationModal from './ConfirmationModal';
+import Tooltip from './Tooltip';
 
 interface ManageHistoryButtonProps extends ButtonProps {
   tooltipText: string;
 }
 
-const ManageHistoryButton: FC<PropsWithChildren<ManageHistoryButtonProps>> = (
-  props
-) => {
-  const { children, tooltipText, ...buttonProps } = props;
+const ManageHistoryButton: FC<PropsWithChildren<ManageHistoryButtonProps>> = ({
+  children,
+  tooltipText,
+  ...buttonProps
+}) => {
   return (
-    <OverlayTrigger placement="top" overlay={<Tooltip>{tooltipText}</Tooltip>}>
+    <Tooltip tooltipText={tooltipText}>
       <Button variant="secondary" {...buttonProps}>
         {children}
       </Button>
-    </OverlayTrigger>
+    </Tooltip>
   );
 };
 
@@ -34,8 +33,7 @@ interface ManageHistoryButtonGroupProps {
   id: string;
   path: string;
   body: string;
-  small?: boolean;
-  noViewResultsButton?: boolean;
+  className?: string;
 }
 
 const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
@@ -43,52 +41,63 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
   id,
   path,
   body,
-  small,
-  noViewResultsButton,
+  className,
 }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const runCommand = useRunCommand();
-  const viewCommandResults = useViewCommandResults();
   const { openToast } = useToast();
   const token = useAppSelector(selectToken);
+  const runCommand = useRunCommand(token, true);
+  const [rerunning, setRerunning] = useState<boolean>(false);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
 
-  const viewResults = () => viewCommandResults(id);
-  const rerunCommand = () => {
-    if (token) {
-      runCommand({
-        method,
-        path,
-        body,
-        token,
-      });
-    }
+  const rerunCommand: MouseEventHandler = async (event) => {
+    event.stopPropagation();
+    await runCommand({
+      method,
+      path,
+      body,
+      setRunning: setRerunning,
+      successMessage: 'Command successfully rerun.',
+    });
   };
   // TODO: Make this work including a confirmation for removeItem -
-  // TODO:  give logout confirmation modal a similar api to toasts but first fix toasts
-  const removeItem = () => {
-    // dispatch(removeHistoryItem(id));
-    // openToast('success', '');
+  //  currently clicking anywhere triggers opening of results
+  const removeItemConfirmation: MouseEventHandler = (event) => {
+    event.stopPropagation();
+    setShowConfirmation(true);
   };
 
-  const size = small ? 14 : 18;
+  const removeItem = () => {
+    dispatch(removeHistoryItem(id));
+    openToast('success', '');
+    router.push('/command-history');
+  };
 
   return (
-    <ButtonGroup aria-label="Basic example" size={small ? 'sm' : undefined}>
-      {!noViewResultsButton && (
-        <ManageHistoryButton tooltipText="View results" onClick={viewResults}>
-          <Terminal size={size} />
+    <>
+      <ButtonGroup className={className} aria-label="Basic example" size="sm">
+        <ManageHistoryButton tooltipText="Rerun command" onClick={rerunCommand}>
+          <RefreshCw className={rerunning ? 'animate rotate' : ''} size={14} />
         </ManageHistoryButton>
-      )}
-      <ManageHistoryButton tooltipText="Rerun command" onClick={rerunCommand}>
-        <RefreshCw size={size} />
-      </ManageHistoryButton>
-      <ManageHistoryButton
-        tooltipText="Remove from history"
-        onClick={removeItem}
+        <ManageHistoryButton
+          tooltipText="Remove from history"
+          onClick={removeItemConfirmation}
+        >
+          <Trash size={14} />
+        </ManageHistoryButton>
+      </ButtonGroup>
+      <ConfirmationModal
+        show={showConfirmation}
+        title="Removal confirmation"
+        buttonText="Remove"
+        handleClose={() => setShowConfirmation(false)}
+        onConfirmation={() => {}}
       >
-        <Trash size={size} />
-      </ManageHistoryButton>
-    </ButtonGroup>
+        Are you sure you want to remove the item from history? This is
+        irreversible.
+      </ConfirmationModal>
+    </>
   );
 };
 

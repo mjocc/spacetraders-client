@@ -20,7 +20,6 @@ const CustomNavbar: FC = () => {
   const { openToast } = useToast();
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const handleClose = () => setShowModal(false);
 
   return (
     <Navbar bg="dark" variant="dark" as="header">
@@ -38,7 +37,7 @@ const CustomNavbar: FC = () => {
         </Link>
         {authenticated && (
           <>
-            <Dropdown>
+            <Dropdown role="button">
               <Dropdown.Toggle as={Navbar.Text}>
                 Logged in as{' '}
                 <span className="text-decoration-underline">{username}</span>
@@ -53,7 +52,7 @@ const CustomNavbar: FC = () => {
               show={showModal}
               title="Logout confirmation"
               buttonText="Logout"
-              handleClose={handleClose}
+              handleClose={() => setShowModal(false)}
               onConfirmation={() => {
                 dispatch(logout());
                 dispatch(clearHistory());

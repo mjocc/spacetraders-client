@@ -23,27 +23,37 @@ const CommmandHistory: NextPage = () => {
         <title>Command History | SpaceTraders Client</title>
         <meta name="description" content="History of commands issued" />
       </Head>
+
       <div className="d-block text-end mb-1">{historyTotal} item(s)</div>
-      {historyChunks[chunkIndex] && (
-        <ListGroup>
-          {historyChunks[chunkIndex].map((historyItem) => (
-            <HistoryItem key={historyItem.id} {...historyItem} />
-          ))}
-        </ListGroup>
+
+      {historyTotal > 0 ? (
+        <>
+          {historyChunks[chunkIndex] && (
+            <ListGroup style={{ height: '481px' }}>
+              {historyChunks[chunkIndex].map((historyItem) => (
+                <HistoryItem key={historyItem.id} {...historyItem} />
+              ))}
+            </ListGroup>
+          )}
+          {historyChunks.length > 1 && (
+            <Pagination className="d-flex justify-content-center align-items-center mt-3">
+              {historyChunks.map((chunk, localChunkIndex) => (
+                <Pagination.Item
+                  key={chunk[0].id}
+                  active={localChunkIndex === chunkIndex}
+                  onClick={() => {
+                    setChunkIndex(localChunkIndex);
+                  }}
+                >
+                  {localChunkIndex + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
+          )}
+        </>
+      ) : (
+        <span>No history as of yet.</span>
       )}
-      <Pagination className="d-flex justify-content-center align-items-center mt-3">
-        {historyChunks.map((chunk, localChunkIndex) => (
-          <Pagination.Item
-            key={chunk[0].id}
-            active={localChunkIndex === chunkIndex}
-            onClick={() => {
-              setChunkIndex(localChunkIndex);
-            }}
-          >
-            {localChunkIndex + 1}
-          </Pagination.Item>
-        ))}
-      </Pagination>
     </>
   );
 };

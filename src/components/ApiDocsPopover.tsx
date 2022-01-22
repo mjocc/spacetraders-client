@@ -1,10 +1,6 @@
 import { FC } from 'react';
-import {
-  OverlayTrigger,
-  OverlayTriggerProps,
-  Popover,
-  Tooltip,
-} from 'react-bootstrap';
+import { OverlayTrigger, OverlayTriggerProps, Popover } from 'react-bootstrap';
+import Tooltip from './Tooltip';
 
 interface ApiDocsPopoverProps {
   children: OverlayTriggerProps['children'];
@@ -30,15 +26,7 @@ const ApiDocsPopover: FC<ApiDocsPopoverProps> = ({ children }) => {
       }
     >
       <div>
-        <OverlayTrigger
-          trigger={['hover', 'focus']}
-          placement="top"
-          overlay={
-            <Tooltip id="api-docs-info-tooltip">Click for API docs</Tooltip>
-          }
-        >
-          {children}
-        </OverlayTrigger>
+        <Tooltip tooltipText={'Toggle API docs popup'}>{children}</Tooltip>
       </div>
     </OverlayTrigger>
   );
