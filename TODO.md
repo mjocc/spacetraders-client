@@ -9,6 +9,6 @@
   - [ ] Improve pagination on /command-history
 - [x] Add view results/rerun command/delete entry icon buttons to history and results page with tooltips
 - [x] Put API docs into popup iframe
-- [ ] Add format and lint commit hooks with husky
+- [x] Add format and lint commit hooks with husky
 - [ ] Use RTK query for getting API data from spacetraders for UI
 - [x] Add custom toast text option to runCommand and change rerun command to use it
