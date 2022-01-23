@@ -4,15 +4,16 @@ import {
   FC,
   MouseEventHandler,
   PropsWithChildren,
-  SetStateAction, useState
+  SetStateAction,
+  useState,
 } from 'react';
 import { Button, ButtonGroup, ButtonProps } from 'react-bootstrap';
 import { RefreshCw, Trash } from 'react-feather';
 import { MethodType, useRunCommand } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { selectToken } from '../store/slices/auth';
 import { removeHistoryItem } from '../store/slices/commandHistory';
 import { useToast } from '../store/slices/outcomeToasts';
-import { selectToken } from '../store/slices/spaceTraders';
 import ConfirmationModal from './ConfirmationModal';
 import Tooltip from './Tooltip';
 
@@ -73,11 +74,11 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
   const removeItemConfirmation: MouseEventHandler = (event) => {
     event.stopPropagation();
     setShowConfirmation(true);
-    setModalOpen && setModalOpen(true)
+    setModalOpen && setModalOpen(true);
   };
 
   const removeItem = () => {
-    setModalOpen && setModalOpen(false)
+    setModalOpen && setModalOpen(false);
     dispatch(removeHistoryItem(id));
     openToast('success', 'History item successfully deleted.');
     router.push('/command-history');

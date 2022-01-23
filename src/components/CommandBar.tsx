@@ -14,7 +14,7 @@ import {
 import { ChevronDown, ChevronUp } from 'react-feather';
 import { handleFormChange, MethodType, useRunCommand } from '../lib/utils';
 import { useAppSelector } from '../store/hooks';
-import { selectToken } from '../store/slices/spaceTraders';
+import { selectToken } from '../store/slices/auth';
 import ApiDocsPopover from './ApiDocsPopover';
 import SubmitButton from './SubmitButton';
 import Tooltip from './Tooltip';

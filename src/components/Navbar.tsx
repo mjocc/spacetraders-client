@@ -4,13 +4,13 @@ import { FC, useState } from 'react';
 import { Container, Dropdown, Navbar } from 'react-bootstrap';
 import spaceTradersLogo from '../../public/spacetraders.svg';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { clearHistory } from '../store/slices/commandHistory';
-import { useToast } from '../store/slices/outcomeToasts';
 import {
   logout,
   selectAuthenticated,
   selectUsername,
-} from '../store/slices/spaceTraders';
+} from '../store/slices/auth';
+import { clearHistory } from '../store/slices/commandHistory';
+import { useToast } from '../store/slices/outcomeToasts';
 import ConfirmationModal from './ConfirmationModal';
 
 const CustomNavbar: FC = () => {

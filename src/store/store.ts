@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import localForage from 'localforage';
 import { combineReducers } from 'redux';
 import {
   FLUSH,
@@ -10,20 +11,19 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import authReducer from './slices/auth';
 import commandHistoryReducer from './slices/commandHistory';
 import outcomeToastsReducer from './slices/outcomeToasts';
-import spaceTradersReducer from './slices/spaceTraders';
 
 const persistConfig = {
-  key: 'auth',
-  whitelist: ['spaceTraders', 'commandHistory'],
+  key: 'root',
+  blacklist: ['outcomeToasts'],
   version: 1,
-  storage,
+  storage: localForage,
 };
 
 const rootReducer = combineReducers({
-  spaceTraders: spaceTradersReducer,
+  auth: authReducer,
   outcomeToasts: outcomeToastsReducer,
   commandHistory: commandHistoryReducer,
 });

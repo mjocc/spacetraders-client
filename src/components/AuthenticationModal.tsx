@@ -7,15 +7,12 @@ import {
   useViewCommandResults,
 } from '../lib/utils';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { login, selectAuthenticated } from '../store/slices/auth';
 import {
   addHistoryItem,
   createHistoryItem,
 } from '../store/slices/commandHistory';
 import { useToast } from '../store/slices/outcomeToasts';
-import {
-  initializeSpaceTraders,
-  selectAuthenticated,
-} from '../store/slices/spaceTraders';
 import SubmitButton from './SubmitButton';
 
 const AuthenticationModal: FC = () => {
@@ -31,7 +28,7 @@ const AuthenticationModal: FC = () => {
   const { openToast } = useToast();
   const authenticated = useAppSelector(selectAuthenticated);
   useEffect(() => {
-    if (!authenticated) {
+    if (!authenticated && router.pathname !== '/') {
       router.push('/');
     }
   }, [authenticated, router]);
@@ -48,7 +45,7 @@ const AuthenticationModal: FC = () => {
     setSubmitting(true);
 
     const authenticate = (username: string, token: string) => {
-      dispatch(initializeSpaceTraders({ username, token }));
+      dispatch(login({ username, token }));
       setUsername('');
       setToken('');
     };

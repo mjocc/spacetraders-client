@@ -1,5 +1,5 @@
 import dateFormat from 'dateformat';
-import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { Badge, ListGroupItem, Stack } from 'react-bootstrap';
 import { AlertCircle, CheckCircle } from 'react-feather';
 import { useViewCommandResults } from '../lib/utils';

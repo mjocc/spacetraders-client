@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface SpaceTradersSlice {
+interface AuthSlice {
   username: string | null;
   token: string | null;
 }
 
-const initialState: SpaceTradersSlice = {
+const initialState: AuthSlice = {
   username: null,
   token: null,
 };
 
-const spaceTradersSlice = createSlice({
-  name: 'spaceTraders',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
-    initializeSpaceTraders(
+    login(
       state,
       {
         payload: { username, token },
@@ -31,11 +31,11 @@ const spaceTradersSlice = createSlice({
   },
 });
 
-export const { initializeSpaceTraders, logout } = spaceTradersSlice.actions;
+export const { login, logout } = authSlice.actions;
 
 export const selectAuthenticated = (state: RootState): boolean =>
-  !!(state.spaceTraders.username && state.spaceTraders.token);
-export const selectUsername = (state: RootState) => state.spaceTraders.username;
-export const selectToken = (state: RootState) => state.spaceTraders.token;
+  !!(state.auth.username && state.auth.token);
+export const selectUsername = (state: RootState) => state.auth.username;
+export const selectToken = (state: RootState) => state.auth.token;
 
-export default spaceTradersSlice.reducer;
+export default authSlice.reducer;
