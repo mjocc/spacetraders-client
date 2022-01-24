@@ -5,7 +5,6 @@
 ### TODO
 - [x] Add a command history with links to each command result, an option to rerun, time run, etc.
   - [x] Have /command-results recieve an id prop which it uses to access the command id from redux
-  - [ ] Improve pagination on /command-history
 - [x] Add view results/rerun command/delete entry icon buttons to history and results page with tooltips
 - [x] Put API docs into popup iframe
 - [x] Add format and lint commit hooks with husky

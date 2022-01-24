@@ -1,11 +1,17 @@
 import { FC, PropsWithChildren } from 'react';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button, ButtonProps, Spinner } from 'react-bootstrap';
 
-const SubmitButton: FC<
-  PropsWithChildren<{ variant?: string; submitting: boolean }>
-> = ({ variant, submitting, children }) => {
+interface SubmitButtonProps extends ButtonProps {
+  submitting: boolean;
+}
+
+const SubmitButton: FC<PropsWithChildren<SubmitButtonProps>> = ({
+  submitting,
+  children,
+  ...buttonProps
+}) => {
   return (
-    <Button variant={variant ? variant : 'primary'} type="submit">
+    <Button {...buttonProps} type="submit">
       {submitting ? (
         <Spinner size="sm" animation="border" role="status">
           <span className="visually-hidden">Loading...</span>

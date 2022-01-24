@@ -1,4 +1,4 @@
-import _every from 'lodash/every';
+import { every } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
@@ -56,7 +56,7 @@ export const generateApiHandler =
     if (req.method === 'POST') {
       if (req.body) {
         const bodyParamsPresent = bodyParams.map((param) => param in req.body);
-        const paramsAllPresent = _every(bodyParamsPresent);
+        const paramsAllPresent = every(bodyParamsPresent);
         if (paramsAllPresent) {
           try {
             handler(req, res, req.body);
@@ -75,13 +75,18 @@ export const generateApiHandler =
     }
   };
 
+export const generateUrl = (
+  path: string,
+  params?: { [key: string]: string }
+): string => {
+  return params ? path + '?' + new URLSearchParams(params) : path;
+};
+
 export const generateApiUrl = (
   path: string,
-  params: { [key: string]: string } = {}
+  params?: { [key: string]: string }
 ): string => {
-  return (
-    process.env.NEXT_PUBLIC_API_PATH + path + '?' + new URLSearchParams(params)
-  );
+  return process.env.NEXT_PUBLIC_API_PATH + generateUrl(path, params);
 };
 
 export const useViewCommandResults = (showBack?: boolean) => {
@@ -146,8 +151,8 @@ export const useRunCommand = (token: string | null, showBack?: boolean) => {
         dispatch(addHistoryItem(historyItem));
         cb && cb();
         viewCommandResults(id);
-        setRunning && setRunning(false);
       }
+      setRunning && setRunning(false);
     } else {
       throw Error('no token provided');
     }

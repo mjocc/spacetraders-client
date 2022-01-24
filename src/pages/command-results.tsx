@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import prettyjson from 'prettyjson';
 import { useEffect, useState } from 'react';
-import { Stack } from 'react-bootstrap';
+import { Alert, Stack } from 'react-bootstrap';
 import { ArrowLeft } from 'react-feather';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml';
 import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
+import LoadingScreen from '../components/LoadingScreen';
 import ManageHistoryButtonGroup from '../components/ManageHistoryButtons';
 import { useAppSelector } from '../store/hooks';
 import { selectHistoryById } from '../store/slices/commandHistory';
@@ -62,16 +63,18 @@ const ViewCommandResult: NextPage = () => {
               {prettyjson.render(historyItem.results)}
             </SyntaxHighlighter>
           ) : (
-            <span>
+            <Alert variant="warning">
               Invalid &lsquo;id&rsquo; query parameter. The history item may
               have been deleted.
-            </span>
+            </Alert>
           )
         ) : (
-          <span>No &lsquo;id&rsquo; query parameter provided.</span>
+          <Alert variant="warning">
+            No &lsquo;id&rsquo; query parameter provided.
+          </Alert>
         )
       ) : (
-        <span>Loading...</span>
+        <LoadingScreen />
       )}
     </>
   );

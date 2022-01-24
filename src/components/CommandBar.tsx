@@ -10,6 +10,9 @@ import {
   Form,
   InputGroup,
   Row,
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
 } from 'react-bootstrap';
 import { ChevronDown, ChevronUp } from 'react-feather';
 import { handleFormChange, MethodType, useRunCommand } from '../lib/utils';
@@ -58,14 +61,29 @@ const CommandBar: FC = () => {
               <Row>
                 <Col xs={2}>
                   <Form.Group controlId="command-bar-method-field">
-                    <Form.Select
+                    <ToggleButtonGroup
+                      type="radio"
+                      name="http-method"
                       aria-label="http method"
                       value={method}
-                      onChange={handleFormChange(setMethod)}
+                      onChange={(value) => setMethod(value)}
+                      className="d-flex"
                     >
-                      <option value="GET">GET</option>
-                      <option value="POST">POST</option>
-                    </Form.Select>
+                      <ToggleButton
+                        variant="outline-primary"
+                        id="get-button"
+                        value="GET"
+                      >
+                        GET
+                      </ToggleButton>
+                      <ToggleButton
+                        variant="outline-primary"
+                        id="post-button"
+                        value="POST"
+                      >
+                        POST
+                      </ToggleButton>
+                    </ToggleButtonGroup>
                     <Form.Label>Method</Form.Label>
                   </Form.Group>
                 </Col>
@@ -102,14 +120,19 @@ const CommandBar: FC = () => {
                   </Col>
                 )}
                 <Col xs={2}>
-                  <div className="d-grid">
-                    <ButtonGroup>
-                      <SubmitButton submitting={submitting} />
+                  <Stack>
+                    <ButtonGroup style={{ flex: 1 }}>
+                      <SubmitButton
+                        style={{ flex: 1 }}
+                        submitting={submitting}
+                      />
                       <Link href="/command-history" passHref>
-                        <Button variant="secondary">History</Button>
+                        <Button style={{ flex: 1 }} variant="secondary">
+                          History
+                        </Button>
                       </Link>
                     </ButtonGroup>
-                  </div>
+                  </Stack>
                 </Col>
               </Row>
             </Form>

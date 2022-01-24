@@ -1,8 +1,8 @@
-import _chunk from 'lodash/chunk';
+import { chunk } from 'lodash';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-import { ListGroup, Pagination } from 'react-bootstrap';
+import { Alert, ListGroup, Pagination } from 'react-bootstrap';
 import HistoryItem from '../components/HistoryItem';
 import { useAppSelector } from '../store/hooks';
 import {
@@ -13,7 +13,7 @@ import {
 const CommmandHistory: NextPage = () => {
   const history = useAppSelector(selectHistory);
   const historyTotal = useAppSelector(selectHistoryTotal);
-  const historyChunks = _chunk(history, 10);
+  const historyChunks = chunk(history, 10);
   const [chunkIndex, setChunkIndex] = useState<number>(0);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -57,7 +57,7 @@ const CommmandHistory: NextPage = () => {
           )}
         </>
       ) : (
-        <span>No history as of yet.</span>
+        <Alert variant="light">No history as of yet</Alert>
       )}
     </>
   );

@@ -1,9 +1,18 @@
 import { FC } from 'react';
 import { Spinner } from 'react-bootstrap';
 
-const LoadingScreen: FC = () => {
+interface LoadingScreenProps {
+  fullscreen?: boolean;
+}
+
+const LoadingScreen: FC<LoadingScreenProps> = ({ fullscreen }) => {
+  const className =
+    (fullscreen ? 'bg-black position-absolute h-100 w-100 top-0 start-0' : '') +
+    ' d-flex justify-content-center align-items-center';
+  const style = fullscreen ? {} : { height: '16rem' };
+
   return (
-    <div className="position-absolute h-100 w-100 top-0 start-0 d-flex justify-content-center align-items-center bg-black">
+    <div className={className} style={style}>
       <Spinner animation="border" role="status">
         <span className="visually-hidden">Loading...</span>
       </Spinner>

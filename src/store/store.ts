@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query/react';
 import localForage from 'localforage';
 import { combineReducers } from 'redux';
 import {
@@ -14,10 +15,11 @@ import {
 import authReducer from './slices/auth';
 import commandHistoryReducer from './slices/commandHistory';
 import outcomeToastsReducer from './slices/outcomeToasts';
+import { spaceTradersApi } from './slices/spaceTraders';
 
 const persistConfig = {
   key: 'root',
-  blacklist: ['outcomeToasts'],
+  whitelist: ['auth', 'commandHistory'],
   version: 1,
   storage: localForage,
 };
@@ -26,6 +28,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   outcomeToasts: outcomeToastsReducer,
   commandHistory: commandHistoryReducer,
+  [spaceTradersApi.reducerPath]: spaceTradersApi.reducer,
 });
 const reducer = persistReducer(persistConfig, rootReducer);
 
@@ -36,10 +39,12 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(spaceTradersApi.middleware),
 });
-export default store;
 
+setupListeners(store.dispatch);
+
+export default store;
 export const persistor = persistStore(store);
 
 export type AppDispatch = typeof store.dispatch;
