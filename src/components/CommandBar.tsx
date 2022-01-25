@@ -25,8 +25,8 @@ import Tooltip from './Tooltip';
 const CommandBar: FC = () => {
   const token = useAppSelector(selectToken);
   const runCommand = useRunCommand(token);
-  const [openBar, setOpenBar] = useState<boolean>(true);
-  const [openButton, setOpenButton] = useState<boolean>(false);
+  const [openBar, setOpenBar] = useState<boolean>(false);
+  const [openButton, setOpenButton] = useState<boolean>(!openBar);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   const [method, setMethod] = useState<MethodType>('GET');
@@ -54,7 +54,6 @@ const CommandBar: FC = () => {
         <Container
           style={{ zIndex: 1000 }}
           className="position-absolute bottom-0 start-0 end-0"
-          fluid
         >
           <div className="px-4 pt-3 pb-1 m-2 mb-4 rounded-3 border border-primary">
             <Form onSubmit={handleSubmit}>
