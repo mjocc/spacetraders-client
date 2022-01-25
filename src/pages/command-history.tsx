@@ -1,9 +1,9 @@
 import { chunk } from 'lodash';
 import { NextPage } from 'next';
-import Head from 'next/head';
 import { useState } from 'react';
 import { Alert, ListGroup, Pagination } from 'react-bootstrap';
 import HistoryItem from '../components/HistoryItem';
+import StandardPageHead from '../components/StandardPageHead';
 import { useAppSelector } from '../store/hooks';
 import {
   selectHistory,
@@ -19,10 +19,10 @@ const CommmandHistory: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Command History | SpaceTraders Client</title>
-        <meta name="description" content="History of commands issued" />
-      </Head>
+      <StandardPageHead
+        title="History"
+        description="History of commands issued"
+      />
 
       <div className="d-block text-end mb-1">{historyTotal} item(s)</div>
 

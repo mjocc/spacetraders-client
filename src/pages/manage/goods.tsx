@@ -2,7 +2,9 @@ import { startCase } from 'lodash';
 import { NextPage } from 'next';
 import { ListGroup } from 'react-bootstrap';
 import DataCard from '../../components/DataCard';
+import DataCardLayout from '../../components/DataCardLayout';
 import LoadingGate from '../../components/LoadingGate';
+import StandardPageHead from '../../components/StandardPageHead';
 import { useAppSelector } from '../../store/hooks';
 import { selectToken } from '../../store/slices/auth';
 import { Goods, useGetGoodsQuery } from '../../store/slices/spaceTraders';
@@ -13,10 +15,14 @@ const GoodsPage: NextPage<GoodsPageProps> = () => {
   const token = useAppSelector(selectToken);
   const queryResult = useGetGoodsQuery(token);
   return (
-    <LoadingGate token={token} {...queryResult}>
-      {(data: Goods) => (
-        <div className="scroll-container">
-          <div className="d-flex flex-wrap gap-2 justify-content-center">
+    <>
+      <StandardPageHead
+        title="Goods"
+        description="Goods available to purchase"
+      />
+      <LoadingGate token={token} {...queryResult}>
+        {(data: Goods) => (
+          <DataCardLayout>
             {data.goods.map((good) => (
               <DataCard
                 key={good.name}
@@ -34,10 +40,10 @@ const GoodsPage: NextPage<GoodsPageProps> = () => {
                 ignoreDataKeys={['name', 'symbol']}
               />
             ))}
-          </div>
-        </div>
-      )}
-    </LoadingGate>
+          </DataCardLayout>
+        )}
+      </LoadingGate>
+    </>
   );
 };
 

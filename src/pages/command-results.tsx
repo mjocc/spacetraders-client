@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import prettyjson from 'prettyjson';
@@ -11,6 +10,7 @@ import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml';
 import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
 import LoadingScreen from '../components/LoadingScreen';
 import ManageHistoryButtonGroup from '../components/ManageHistoryButtons';
+import StandardPageHead from '../components/StandardPageHead';
 import { useAppSelector } from '../store/hooks';
 import { selectHistoryById } from '../store/slices/commandHistory';
 
@@ -18,6 +18,7 @@ SyntaxHighlighter.registerLanguage('yaml', yaml);
 
 const ViewCommandResult: NextPage = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(true);
   const [id, setId] = useState<string>('');
   const [back, setBack] = useState<boolean>(false);
   const historyItem = useAppSelector(selectHistoryById(id));
@@ -37,12 +38,16 @@ const ViewCommandResult: NextPage = () => {
     }
   }, [router.query]);
 
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 250);
+  }, [setLoading]);
+
   return (
     <>
-      <Head>
-        <title>Result | SpaceTraders Client</title>
-        <meta name="description" content="Results from executed command" />
-      </Head>
+      <StandardPageHead
+        title="Results"
+        description="Results from executed command"
+      />
 
       <Stack direction="horizontal" className="mb-2" gap={2}>
         {back && (

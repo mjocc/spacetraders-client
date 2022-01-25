@@ -1,13 +1,13 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
+import StandardPageHead from '../components/StandardPageHead';
 
 const Home: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>Home | SpaceTraders Client</title>
-        <meta name="description" content="Client for spacetraders.io game" />
-      </Head>
+      <StandardPageHead
+        title="Home"
+        description="Client for spacetraders.io game"
+      />
     </>
   );
 };
