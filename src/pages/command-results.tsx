@@ -59,7 +59,11 @@ const ViewCommandResult: NextPage = () => {
       {router.query ? (
         id ? (
           historyItem ? (
-            <SyntaxHighlighter language="yaml" style={atomDark}>
+            <SyntaxHighlighter
+              className="scroll-container"
+              language="yaml"
+              style={atomDark}
+            >
               {prettyjson.render(historyItem.results)}
             </SyntaxHighlighter>
           ) : (

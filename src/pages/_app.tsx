@@ -11,7 +11,7 @@ import Navbar from '../components/Navbar';
 import OutcomeToasts from '../components/OutcomeToasts';
 import Sidebar from '../components/Sidebar';
 import store, { persistor } from '../store/store';
-import '../styles/animations.scss';
+import '../styles/main.scss';
 
 function App({ Component, pageProps }: AppProps) {
   return (

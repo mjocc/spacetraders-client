@@ -2,15 +2,25 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { generateUrl } from '../../lib/utils';
 
 export interface Loan {
-  due: string;
-  id: string;
-  repaymentAmount: string;
-  status: string;
+  amount: number;
+  collateralRequired: boolean;
+  rate: number;
+  termInDays: number;
   type: string;
 }
 
 export interface Loans {
   loans: Loan[];
+}
+
+export interface Good {
+  name: string;
+  symbol: string;
+  volumePerUnit: number;
+}
+
+export interface Goods {
+  goods: Good[];
 }
 
 export const spaceTradersApi = createApi({
@@ -21,7 +31,11 @@ export const spaceTradersApi = createApi({
       query: (token) =>
         generateUrl('types/loans', token ? { token } : undefined),
     }),
+    getGoods: builder.query<Goods, string | null>({
+      query: (token) =>
+        generateUrl('types/goods', token ? { token } : undefined),
+    }),
   }),
 });
 
-export const { useGetLoansQuery } = spaceTradersApi;
+export const { useGetLoansQuery, useGetGoodsQuery } = spaceTradersApi;

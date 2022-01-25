@@ -154,7 +154,7 @@ const CommandBar: FC = () => {
         <div className="position-absolute end-0 bottom-0 pb-4 pe-4">
           <Tooltip tooltipText="Show command bar">
             <Button
-              variant="secondary"
+              variant="light"
               onClick={() => {
                 setOpenButton(false);
               }}

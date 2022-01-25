@@ -1,11 +1,11 @@
 import { startCase } from 'lodash';
 import { NextPage } from 'next';
-import { Col, Row } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import DataCard from '../../components/DataCard';
 import LoadingGate from '../../components/LoadingGate';
 import { useAppSelector } from '../../store/hooks';
 import { selectToken } from '../../store/slices/auth';
-import { Loan, Loans, useGetLoansQuery } from '../../store/slices/spaceTraders';
+import { Loans, useGetLoansQuery } from '../../store/slices/spaceTraders';
 
 interface LoansPageProps {}
 
@@ -15,21 +15,25 @@ const LoansPage: NextPage<LoansPageProps> = () => {
   return (
     <LoadingGate token={token} {...queryResult}>
       {(data: Loans) => (
-        <Row>
-          <Col xs={4}>
-            {data.loans.map((loan) => (
-              <DataCard
-                key={loan.type}
-                title={startCase(loan.type.toLowerCase())}
-                data={loan}
-                buttonText="Take loan"
-                // TODO: Integrate 'onButtonClick' logic
-                onButtonClick={() => {}}
-                ignoreDataKeys={['type']}
-              />
-            ))}
-          </Col>
-        </Row>
+        <div className="d-flex flex-wrap gap-2">
+          {data.loans.map((loan) => (
+            <DataCard
+              key={loan.type}
+              title={startCase(loan.type.toLowerCase())}
+              data={loan}
+              renderListItem={(key, value) => (
+                <ListGroup.Item key={key}>
+                  <span className="fw-bold">{startCase(key)}</span>:{' '}
+                  <span>{value.toString()}</span>
+                </ListGroup.Item>
+              )}
+              buttonText="Take loan"
+              // TODO: Integrate 'onButtonClick' logic
+              onButtonClick={() => {}}
+              ignoreDataKeys={['type']}
+            />
+          ))}
+        </div>
       )}
     </LoadingGate>
   );
