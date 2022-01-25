@@ -23,6 +23,20 @@ export interface Goods {
   goods: Good[];
 }
 
+export interface Ship {
+  class: string;
+  manufacturer: string;
+  maxCargo: number;
+  plating: number;
+  speed: number;
+  type: string;
+  weapons: number;
+}
+
+export interface Ships {
+  ships: Ship[]
+}
+
 export const spaceTradersApi = createApi({
   reducerPath: 'spaceTraders',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_PATH }),
@@ -35,7 +49,11 @@ export const spaceTradersApi = createApi({
       query: (token) =>
         generateUrl('types/goods', token ? { token } : undefined),
     }),
+    getShips: builder.query<Ships, string | null>({
+      query: (token) =>
+        generateUrl('types/ships', token ? { token } : undefined),
+    }),
   }),
 });
 
-export const { useGetLoansQuery, useGetGoodsQuery } = spaceTradersApi;
+export const { useGetLoansQuery, useGetGoodsQuery, useGetShipsQuery } = spaceTradersApi;

@@ -37,6 +37,7 @@ const Sidebar: FC = () => {
       <hr className="my-2" />
       <NavLink href="/manage/loans">Loans</NavLink>
       <NavLink href="/manage/goods">Goods</NavLink>
+      <NavLink href="/manage/ships">Ships</NavLink>
       <NavLink href="/command-results" hiddenUntilActive>
         Command results
       </NavLink>

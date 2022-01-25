@@ -29,7 +29,8 @@ const DataCard: FC<DataCardProps> = ({
             !ignoreDataKeys.includes(key) && renderListItem(key, value)
         )}
       </ListGroup>
-      <Card.Footer className="d-grid">
+      {/* // TODO: fix issue with button centering on ships page */}
+      <Card.Footer className="d-grid flex-grow">
         <Button variant="outline-primary" onClick={onButtonClick}>
           {buttonText}
         </Button>
