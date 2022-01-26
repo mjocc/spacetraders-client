@@ -1,8 +1,5 @@
----
-
-- **NOTE: SEE TODO COMMENTS ACROSS FILES** \*
-
----
+**NOTE: SEE TODO COMMENTS ACROSS FILES**
+-----------------------------------------
 
 ### TODO
 
