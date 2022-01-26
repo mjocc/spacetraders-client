@@ -38,10 +38,10 @@ const Sidebar: FC = () => {
       <NavLink href="/manage/loans">Loans</NavLink>
       <NavLink href="/manage/goods">Goods</NavLink>
       <NavLink href="/manage/ships">Ships</NavLink>
-      <NavLink href="/command-results" hiddenUntilActive>
+      <NavLink href="/command/results" hiddenUntilActive>
         Command results
       </NavLink>
-      <NavLink href="/command-history" hiddenUntilActive>
+      <NavLink href="/command/history" hiddenUntilActive>
         Command history
       </NavLink>
     </Nav>

@@ -34,7 +34,7 @@ export interface Ship {
 }
 
 export interface Ships {
-  ships: Ship[]
+  ships: Ship[];
 }
 
 export const spaceTradersApi = createApi({
@@ -56,4 +56,5 @@ export const spaceTradersApi = createApi({
   }),
 });
 
-export const { useGetLoansQuery, useGetGoodsQuery, useGetShipsQuery } = spaceTradersApi;
+export const { useGetLoansQuery, useGetGoodsQuery, useGetShipsQuery } =
+  spaceTradersApi;

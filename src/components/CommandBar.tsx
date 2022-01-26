@@ -125,7 +125,7 @@ const CommandBar: FC = () => {
                         style={{ flex: 1 }}
                         submitting={submitting}
                       />
-                      <Link href="/command-history" passHref>
+                      <Link href="/command/history" passHref>
                         <Button style={{ flex: 1 }} variant="secondary">
                           History
                         </Button>

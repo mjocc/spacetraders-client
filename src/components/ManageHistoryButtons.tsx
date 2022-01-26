@@ -81,7 +81,7 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
     setModalOpen && setModalOpen(false);
     dispatch(removeHistoryItem(id));
     openToast('success', 'History item successfully deleted.');
-    router.push('/command-history');
+    router.push('/command/history');
   };
 
   return (

@@ -20,7 +20,10 @@ function App({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/svg+xml" href="/spacetraders.svg" />
       </Head>
       <Provider store={store}>
-        <PersistGate loading={<LoadingScreen fullscreen/>} persistor={persistor}>
+        <PersistGate
+          loading={<LoadingScreen fullscreen />}
+          persistor={persistor}
+        >
           <Navbar />
           <AuthenticationModal />
           <OutcomeToasts />

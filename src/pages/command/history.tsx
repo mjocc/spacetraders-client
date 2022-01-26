@@ -2,13 +2,13 @@ import { chunk } from 'lodash';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { Alert, ListGroup, Pagination } from 'react-bootstrap';
-import HistoryItem from '../components/HistoryItem';
-import StandardPageHead from '../components/StandardPageHead';
-import { useAppSelector } from '../store/hooks';
+import HistoryItem from '../../components/HistoryItem';
+import StandardPageHead from '../../components/StandardPageHead';
+import { useAppSelector } from '../../store/hooks';
 import {
   selectHistory,
   selectHistoryTotal,
-} from '../store/slices/commandHistory';
+} from '../../store/slices/commandHistory';
 
 const CommmandHistory: NextPage = () => {
   const history = useAppSelector(selectHistory);
