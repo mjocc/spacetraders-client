@@ -37,10 +37,10 @@ const Sidebar: FC = () => {
       <hr className="my-2" />
       <NavLink href="/manage/loans">Loans</NavLink>
       <NavLink href="/manage/goods">Goods</NavLink>
-      <NavLink href="/command-results" hiddenUntilActive>
+      <NavLink href="/command/results" hiddenUntilActive>
         Command results
       </NavLink>
-      <NavLink href="/command-history" hiddenUntilActive>
+      <NavLink href="/command/history" hiddenUntilActive>
         Command history
       </NavLink>
     </Nav>

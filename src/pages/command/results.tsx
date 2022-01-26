@@ -8,11 +8,11 @@ import { ArrowLeft } from 'react-feather';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml';
 import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
-import LoadingScreen from '../components/LoadingScreen';
-import ManageHistoryButtonGroup from '../components/ManageHistoryButtons';
-import StandardPageHead from '../components/StandardPageHead';
-import { useAppSelector } from '../store/hooks';
-import { selectHistoryById } from '../store/slices/commandHistory';
+import LoadingScreen from '../../components/LoadingScreen';
+import ManageHistoryButtonGroup from '../../components/ManageHistoryButtons';
+import StandardPageHead from '../../components/StandardPageHead';
+import { useAppSelector } from '../../store/hooks';
+import { selectHistoryById } from '../../store/slices/commandHistory';
 
 SyntaxHighlighter.registerLanguage('yaml', yaml);
 
@@ -39,7 +39,7 @@ const ViewCommandResult: NextPage = () => {
   }, [router.query]);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 250);
+    setTimeout(() => setLoading(false), 1000);
   }, [setLoading]);
 
   return (
@@ -51,7 +51,7 @@ const ViewCommandResult: NextPage = () => {
 
       <Stack direction="horizontal" className="mb-2" gap={2}>
         {back && (
-          <Link href="/command-history" passHref>
+          <Link href="/command/history" passHref>
             <ArrowLeft role="button" size={28} />
           </Link>
         )}
@@ -72,13 +72,13 @@ const ViewCommandResult: NextPage = () => {
               {prettyjson.render(historyItem.results)}
             </SyntaxHighlighter>
           ) : (
-            <Alert variant="warning">
+            loading ? <LoadingScreen /> : <Alert variant="error">
               Invalid &lsquo;id&rsquo; query parameter. The history item may
               have been deleted.
             </Alert>
           )
         ) : (
-          <Alert variant="warning">
+          loading ? <LoadingScreen /> : <Alert variant="warning">
             No &lsquo;id&rsquo; query parameter provided.
           </Alert>
         )

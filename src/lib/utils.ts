@@ -95,7 +95,7 @@ export const useViewCommandResults = (showBack?: boolean) => {
     const params: { id: string } | { id: string; back: string } = showBack
       ? { id: resultsId, back: 'true' }
       : { id: resultsId };
-    const url = '/command-results?' + new URLSearchParams(params);
+    const url = '/command/results?' + new URLSearchParams(params);
     router.push(url);
   };
 };
