@@ -15,7 +15,7 @@ import {
 import authReducer from './slices/auth';
 import commandHistoryReducer from './slices/commandHistory';
 import outcomeToastsReducer from './slices/outcomeToasts';
-import { spaceTradersApi } from './slices/spaceTraders';
+import { spaceTradersApi } from './slices/spaceTraders/api';
 
 const persistConfig = {
   key: 'root',

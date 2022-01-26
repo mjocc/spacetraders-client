@@ -7,7 +7,8 @@ import LoadingGate from '../../components/LoadingGate';
 import StandardPageHead from '../../components/StandardPageHead';
 import { useAppSelector } from '../../store/hooks';
 import { selectToken } from '../../store/slices/auth';
-import { Loans, useGetLoansQuery } from '../../store/slices/spaceTraders';
+import { useGetLoansQuery } from '../../store/slices/spaceTraders/api';
+import { Loan } from '../../store/slices/spaceTraders/types';
 
 interface LoansPageProps {}
 
@@ -21,9 +22,9 @@ const LoansPage: NextPage<LoansPageProps> = () => {
         description="Loans available to purchase"
       />
       <LoadingGate token={token} {...queryResult}>
-        {(data: Loans) => (
+        {(data: Loan[]) => (
           <DataCardLayout>
-            {data.loans.map((loan) => (
+            {data.map((loan) => (
               <DataCard
                 key={loan.type}
                 title={startCase(loan.type.toLowerCase())}

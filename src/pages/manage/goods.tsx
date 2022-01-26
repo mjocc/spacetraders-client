@@ -7,7 +7,8 @@ import LoadingGate from '../../components/LoadingGate';
 import StandardPageHead from '../../components/StandardPageHead';
 import { useAppSelector } from '../../store/hooks';
 import { selectToken } from '../../store/slices/auth';
-import { Goods, useGetGoodsQuery } from '../../store/slices/spaceTraders';
+import { useGetGoodsQuery } from '../../store/slices/spaceTraders/api';
+import { Good } from '../../store/slices/spaceTraders/types';
 
 interface GoodsPageProps {}
 
@@ -21,9 +22,9 @@ const GoodsPage: NextPage<GoodsPageProps> = () => {
         description="Goods available to purchase"
       />
       <LoadingGate token={token} {...queryResult}>
-        {(data: Goods) => (
+        {(data: Good[]) => (
           <DataCardLayout>
-            {data.goods.map((good) => (
+            {data.map((good) => (
               <DataCard
                 key={good.name}
                 title={startCase(good.name.toLowerCase())}

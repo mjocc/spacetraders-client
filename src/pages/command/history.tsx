@@ -1,7 +1,8 @@
 import { chunk } from 'lodash';
 import { NextPage } from 'next';
 import { useState } from 'react';
-import { Alert, ListGroup, Pagination } from 'react-bootstrap';
+import { Alert, ListGroup } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import HistoryItem from '../../components/HistoryItem';
 import StandardPageHead from '../../components/StandardPageHead';
 import { useAppSelector } from '../../store/hooks';
@@ -36,24 +37,30 @@ const CommmandHistory: NextPage = () => {
                   {...historyItem}
                   stopClickEvents={modalOpen}
                   setModalOpen={setModalOpen}
+                  listGroupItem
                 />
               ))}
             </ListGroup>
           )}
           {historyChunks.length > 1 && (
-            <Pagination className="d-flex justify-content-center align-items-center mt-3">
-              {historyChunks.map((chunk, localChunkIndex) => (
-                <Pagination.Item
-                  key={chunk[0].id}
-                  active={localChunkIndex === chunkIndex}
-                  onClick={() => {
-                    setChunkIndex(localChunkIndex);
-                  }}
-                >
-                  {localChunkIndex + 1}
-                </Pagination.Item>
-              ))}
-            </Pagination>
+            <ReactPaginate
+              className="pagination d-flex justify-content-center align-items-center mt-3"
+              pageCount={historyChunks.length}
+              forcePage={chunkIndex}
+              onPageChange={({ selected }) => setChunkIndex(selected)}
+              previousLabel="&laquo;"
+              nextLabel="&raquo;"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              disabledClassName="disabled"
+              activeClassName="active"
+            />
           )}
         </>
       ) : (

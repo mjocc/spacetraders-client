@@ -1,8 +1,8 @@
-import { EventHandler, FC, MouseEvent } from 'react';
+import { EventHandler, FC, MouseEvent, ReactNode } from 'react';
 import { Button, Card, ListGroup } from 'react-bootstrap';
 
 interface DataCardProps {
-  title: string;
+  title: string | ReactNode;
   data: { [key: string]: any };
   renderListItem: (key: string, value: any) => void;
   buttonText: string;
@@ -19,7 +19,7 @@ const DataCard: FC<DataCardProps> = ({
   ignoreDataKeys = [],
 }) => {
   return (
-    <Card style={{ width: '32%' }} className="shadow-lg">
+    <Card className="shadow-lg">
       <Card.Header>
         <Card.Title className="mb-0">{title}</Card.Title>
       </Card.Header>
@@ -30,10 +30,10 @@ const DataCard: FC<DataCardProps> = ({
         )}
       </ListGroup>
       {/* // TODO: fix issue with button centering on ships page */}
-      <Card.Footer className="d-grid flex-grow">
-        <Button variant="outline-primary" onClick={onButtonClick}>
-          {buttonText}
-        </Button>
+      <Card.Footer className="d-grid">
+          <Button variant="outline-primary" onClick={onButtonClick}>
+            {buttonText}
+          </Button>
       </Card.Footer>
     </Card>
   );

@@ -9,39 +9,51 @@ import ManageHistoryButtonGroup from './ManageHistoryButtons';
 interface HistoryItemProps extends HistoryItem {
   stopClickEvents?: boolean;
   setModalOpen?: Dispatch<SetStateAction<boolean>>;
+  listGroupItem?: boolean;
+  className?: string;
 }
 
 const HistoryItem: FC<HistoryItemProps> = (props) => {
   const viewCommandResults = useViewCommandResults(true);
-  const { id, method, path, datetime, error, stopClickEvents } = props;
+  const {
+    id,
+    method,
+    path,
+    datetime,
+    error,
+    stopClickEvents,
+    listGroupItem,
+    className,
+  } = props;
   const viewResults = () => viewCommandResults(id);
 
-  return (
-    <ListGroupItem
-      key={id}
-      action
-      onClick={stopClickEvents ? undefined : viewResults}
-    >
-      <Stack direction="horizontal">
-        <div>
-          {error ? (
-            <AlertCircle className="text-danger me-3" />
-          ) : (
-            <CheckCircle className="text-success me-3" />
-          )}
-          <Badge bg="info" className="me-3">
-            {method}
-          </Badge>
-          <span>{path}</span>
-        </div>
-        <div className="ms-auto">
-          <span className="me-4">
-            {dateFormat(new Date(datetime), 'H:MM "on" dddd d, mmm yy')}
-          </span>
-          <ManageHistoryButtonGroup {...props} />
-        </div>
-      </Stack>
+  const content = (
+    <Stack direction="horizontal" className={'flex-grow-1 ' + className}>
+      <div>
+        {error ? (
+          <AlertCircle className="text-danger me-3" />
+        ) : (
+          <CheckCircle className="text-success me-3" />
+        )}
+        <Badge bg="info" className="me-3">
+          {method}
+        </Badge>
+        <span>{path}</span>
+      </div>
+      <div className="ms-auto">
+        <span className="me-4">
+          {dateFormat(new Date(datetime), 'HH:MM, yyyy-mm-dd')}
+        </span>
+        <ManageHistoryButtonGroup {...props} />
+      </div>
+    </Stack>
+  );
+  return listGroupItem ? (
+    <ListGroupItem action onClick={stopClickEvents ? undefined : viewResults}>
+      {content}
     </ListGroupItem>
+  ) : (
+    content
   );
 };
 

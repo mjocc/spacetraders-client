@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import { Stack } from 'react-bootstrap';
 import { ArrowLeft } from 'react-feather';
 import DisplayCommandResults from '../../components/DisplayCommandResults';
+import HistoryItem from '../../components/HistoryItem';
 import LoadingScreen from '../../components/LoadingScreen';
-import ManageHistoryButtonGroup from '../../components/ManageHistoryButtons';
 import StandardPageHead from '../../components/StandardPageHead';
 import { useAppSelector } from '../../store/hooks';
 import { selectHistoryById } from '../../store/slices/commandHistory';
@@ -50,9 +50,7 @@ const ViewCommandResult: NextPage = () => {
           </Link>
         )}
         <h1 className="h5 mb-0">Query results</h1>
-        {historyItem && (
-          <ManageHistoryButtonGroup className="ms-auto" {...historyItem} />
-        )}
+        {historyItem && <HistoryItem className="ms-1" {...historyItem} />}
       </Stack>
 
       {router.query ? (

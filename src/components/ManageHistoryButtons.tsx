@@ -40,7 +40,6 @@ interface ManageHistoryButtonGroupProps {
   id: string;
   path: string;
   body: string;
-  className?: string;
   setModalOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -49,7 +48,6 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
   id,
   path,
   body,
-  className,
   setModalOpen,
 }) => {
   const router = useRouter();
@@ -86,7 +84,7 @@ const ManageHistoryButtonGroup: FC<ManageHistoryButtonGroupProps> = ({
 
   return (
     <>
-      <ButtonGroup className={className} aria-label="Basic example" size="sm">
+      <ButtonGroup aria-label="Basic example" size="sm">
         <ManageHistoryButton tooltipText="Rerun command" onClick={rerunCommand}>
           <RefreshCw className={rerunning ? 'animate rotate' : ''} size={14} />
         </ManageHistoryButton>
