@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FC, FormEventHandler, useState } from 'react';
+import { CSSProperties, FC, FormEventHandler, useState } from 'react';
 import {
   Button,
   ButtonGroup,
@@ -53,9 +53,12 @@ const CommandBar: FC = () => {
       <Collapse in={openBar} onExited={() => setOpenButton(true)}>
         <Container
           style={{ zIndex: 1000 }}
-          className="position-absolute bottom-0 start-0 end-0"
+          className="position-fixed bottom-0 start-0 end-0"
         >
-          <div className="px-4 pt-3 pb-1 m-2 mb-4 rounded-3 border border-primary">
+          <div
+            className="px-4 pt-3 pb-1 m-2 mb-4 rounded-3 border border-primary bg-light"
+            style={{ '--bs-bg-opacity': 0.8 } as CSSProperties}
+          >
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Col xs={2}>
@@ -136,7 +139,7 @@ const CommandBar: FC = () => {
               </Row>
             </Form>
           </div>
-          <div className="position-absolute end-0 bottom-0 pb-4 d-flex justify-content-center align-items-center w-100">
+          <div className="position-fixed end-0 bottom-0 pb-4 d-flex justify-content-center align-items-center w-100">
             <Tooltip tooltipText="Hide command bar">
               <ChevronDown
                 role="button"
@@ -150,7 +153,7 @@ const CommandBar: FC = () => {
         </Container>
       </Collapse>
       <Fade in={openButton} onExited={() => setOpenBar(true)}>
-        <div className="position-absolute end-0 bottom-0 pb-4 pe-4">
+        <div className="position-fixed end-0 bottom-0 pb-4 pe-4">
           <Tooltip tooltipText="Show command bar">
             <Button
               variant="light"

@@ -22,7 +22,7 @@ const CustomNavbar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
-    <Navbar bg="dark" variant="dark" as="header">
+    <Navbar bg="dark" variant="dark" as="header" fixed="top">
       <Container>
         <Link href="/" passHref>
           <Navbar.Brand className="d-flex justify-content-center align-items-center">

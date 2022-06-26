@@ -1,7 +1,4 @@
-import { startCase } from 'lodash';
 import { NextPage } from 'next';
-import { ListGroup } from 'react-bootstrap';
-import DataCard from '../../components/DataCard';
 import DataCardLayout from '../../components/DataCardLayout';
 import LoadingGate from '../../components/LoadingGate';
 import StandardPageHead from '../../components/StandardPageHead';
@@ -23,24 +20,18 @@ const GoodsPage: NextPage<GoodsPageProps> = () => {
       />
       <LoadingGate token={token} {...queryResult}>
         {(data: Good[]) => (
-          <DataCardLayout>
-            {data.map((good) => (
-              <DataCard
-                key={good.name}
-                title={startCase(good.name.toLowerCase())}
-                data={good}
-                renderListItem={(key, value) => (
-                  <ListGroup.Item key={key}>
-                    <span className="fw-bold">{startCase(key)}</span>:{' '}
-                    <span>{value.toString()}</span>
-                  </ListGroup.Item>
-                )}
-                buttonText="Purchase good"
-                // TODO: Integrate 'onButtonClick' logic
-                onButtonClick={() => {}}
-                ignoreDataKeys={['name', 'symbol']}
-              />
-            ))}
+          <DataCardLayout
+            ignoreDataKeys={['name', 'symbol']}
+            defaultOrderKey="name"
+          >
+            {data.map((good) => ({
+              key: good.name,
+              title: good.name,
+              data: good,
+              buttonText: 'Purchase good',
+              // TODO: Integrate 'onButtonClick' logic
+              onButtonClick: () => {},
+            }))}
           </DataCardLayout>
         )}
       </LoadingGate>

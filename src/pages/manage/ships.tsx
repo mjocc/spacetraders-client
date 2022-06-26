@@ -1,7 +1,5 @@
-import { startCase } from 'lodash';
 import { NextPage } from 'next';
-import { ListGroup, Stack } from 'react-bootstrap';
-import DataCard from '../../components/DataCard';
+import { Stack } from 'react-bootstrap';
 import DataCardLayout from '../../components/DataCardLayout';
 import LoadingGate from '../../components/LoadingGate';
 import StandardPageHead from '../../components/StandardPageHead';
@@ -23,29 +21,23 @@ const ShipsPage: NextPage<ShipsPageProps> = () => {
       />
       <LoadingGate token={token} {...queryResult}>
         {(data: Ship[]) => (
-          <DataCardLayout>
-            {data.map((ship) => (
-              <DataCard
-                key={ship.type}
-                title={
-                  <Stack direction="horizontal">
-                    <span>{ship.type}</span>
-                    <small className="ms-auto text-muted">{ship.class}</small>
-                  </Stack>
-                }
-                data={ship}
-                renderListItem={(key, value) => (
-                  <ListGroup.Item key={key}>
-                    <span className="fw-bold">{startCase(key)}</span>:{' '}
-                    <span>{value.toString()}</span>
-                  </ListGroup.Item>
-                )}
-                buttonText="Purchase ship"
-                // TODO: Integrate 'onButtonClick' logic
-                onButtonClick={() => {}}
-                ignoreDataKeys={['type', 'class']}
-              />
-            ))}
+          <DataCardLayout
+            ignoreDataKeys={['type', 'class']}
+            defaultOrderKey="type"
+          >
+            {data.map((ship) => ({
+              key: ship.type,
+              title: (
+                <Stack direction="horizontal">
+                  <span>{ship.type}</span>
+                  <small className="ms-auto text-muted">{ship.class}</small>
+                </Stack>
+              ),
+              data: ship,
+              buttonText: 'Purchase ship',
+              // TODO: Integrate 'onButtonClick' logic
+              onButtonClick: () => {},
+            }))}
           </DataCardLayout>
         )}
       </LoadingGate>

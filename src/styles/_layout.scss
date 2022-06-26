@@ -1,4 +1,14 @@
-.scroll-container {
-  max-height: 40rem;
-  overflow-y: auto;
+$masonry-grid-gap: 15px;
+
+.masonry-grid {
+  display: flex;
+  margin-left: -$masonry-grid-gap;
+  width: auto;
+}
+.masonry-grid_column {
+  background-clip: padding-box;
+  margin-left: $masonry-grid-gap;
+  & > div.card {
+    margin-bottom: $masonry-grid-gap;
+  }
 }

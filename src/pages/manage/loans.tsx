@@ -1,7 +1,4 @@
-import { startCase } from 'lodash';
 import { NextPage } from 'next';
-import { ListGroup } from 'react-bootstrap';
-import DataCard from '../../components/DataCard';
 import DataCardLayout from '../../components/DataCardLayout';
 import LoadingGate from '../../components/LoadingGate';
 import StandardPageHead from '../../components/StandardPageHead';
@@ -23,24 +20,15 @@ const LoansPage: NextPage<LoansPageProps> = () => {
       />
       <LoadingGate token={token} {...queryResult}>
         {(data: Loan[]) => (
-          <DataCardLayout>
-            {data.map((loan) => (
-              <DataCard
-                key={loan.type}
-                title={startCase(loan.type.toLowerCase())}
-                data={loan}
-                renderListItem={(key, value) => (
-                  <ListGroup.Item key={key}>
-                    <span className="fw-bold">{startCase(key)}</span>:{' '}
-                    <span>{value.toString()}</span>
-                  </ListGroup.Item>
-                )}
-                buttonText="Take loan"
-                // TODO: Integrate 'onButtonClick' logic
-                onButtonClick={() => {}}
-                ignoreDataKeys={['type']}
-              />
-            ))}
+          <DataCardLayout ignoreDataKeys={['type']} defaultOrderKey="type">
+            {data.map((loan) => ({
+              key: loan.type,
+              title: loan.type,
+              data: loan,
+              buttonText: 'Take loan',
+              // TODO: Integrate 'onButtonClick' logic
+              onButtonClick: () => {},
+            }))}
           </DataCardLayout>
         )}
       </LoadingGate>

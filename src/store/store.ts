@@ -12,6 +12,7 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/auth';
 import commandHistoryReducer from './slices/commandHistory';
 import outcomeToastsReducer from './slices/outcomeToasts';
@@ -21,7 +22,7 @@ const persistConfig = {
   key: 'root',
   whitelist: ['auth', 'commandHistory'],
   version: 1,
-  storage: localForage,
+  storage: process.env.NEXT_PUBLIC_USE_LOCALFORAGE ? localForage : storage,
 };
 
 const rootReducer = combineReducers({

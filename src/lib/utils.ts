@@ -133,13 +133,16 @@ export const useRunCommand = (token: string | null, showBack?: boolean) => {
       });
       const response = await rawResponse.json();
       response.results
-        ? openToast(
-            'success',
-            successMessage || 'Command successfully executed.'
-          )
+        ? response.results.error
+          ? openToast('error', response.results.error.message)
+          : openToast(
+              'success',
+              successMessage || 'Command successfully executed.'
+            )
         : openToast(
             'error',
-            errorMessage || 'Something went wrong. Please try again.'
+            errorMessage ||
+              "Something went wrong. Command didn't execute. Please try again."
           );
       if (response.results) {
         const { id, historyItem } = createHistoryItem({

@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Stack } from 'react-bootstrap';
 import { ArrowLeft } from 'react-feather';
 import DisplayCommandResults from '../../components/DisplayCommandResults';
@@ -14,24 +14,19 @@ import { selectHistoryById } from '../../store/slices/commandHistory';
 const ViewCommandResult: NextPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
-  const [id, setId] = useState<string>('');
-  const [back, setBack] = useState<boolean>(false);
-  const historyItem = useAppSelector(selectHistoryById(id));
 
-  useEffect(() => {
-    if (router.query.id) {
-      let id;
-      if (typeof router.query.id !== 'string') {
-        id = router.query.id.join('');
-      } else {
-        id = router.query.id;
-      }
-      setId(id);
-    }
-    if (router.query.back) {
-      setBack(true);
-    }
-  }, [router.query]);
+  const id: string = useMemo(
+    () =>
+      router.query.id
+        ? typeof router.query.id !== 'string'
+          ? router.query.id.join('')
+          : router.query.id
+        : '',
+    [router.query]
+  );
+  const back = !!router.query.back;
+
+  const historyItem = useAppSelector(selectHistoryById(id));
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500);
