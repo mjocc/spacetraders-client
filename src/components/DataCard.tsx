@@ -29,12 +29,24 @@ const DataCard: FC<DataCardProps> = ({
       <ListGroup variant="flush">
         {Object.entries(data).map(
           ([key, value]) =>
-            !ignoreDataKeys.includes(key) && (
+            !ignoreDataKeys.includes(key) &&
+            (Array.isArray(value) ? (
+              value.length > 0 && (
+                <ListGroup.Item active={highlight === key} key={key}>
+                  <span className="fw-bold">{startCase(key)}</span>:
+                  <ul className="mb-0">
+                    {value.map((bullet) => (
+                      <li key={bullet}>{startCase(bullet.toLowerCase())}</li>
+                    ))}
+                  </ul>
+                </ListGroup.Item>
+              )
+            ) : (
               <ListGroup.Item active={highlight === key} key={key}>
                 <span className="fw-bold">{startCase(key)}</span>:{' '}
-                <span>{value.toString()}</span>
+                <span>{value.toLocaleString()}</span>
               </ListGroup.Item>
-            )
+            ))
         )}
       </ListGroup>
       <Card.Footer className="d-grid">

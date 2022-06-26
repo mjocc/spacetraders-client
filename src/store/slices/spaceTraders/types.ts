@@ -6,6 +6,12 @@ export interface User {
   username: string;
 }
 
+export interface Good {
+  name: string;
+  symbol: string;
+  volumePerUnit: number;
+}
+
 export interface Loan {
   amount: number;
   collateralRequired: boolean;
@@ -14,18 +20,26 @@ export interface Loan {
   type: string;
 }
 
-export interface Good {
+export interface Structure {
+  type: string;
   name: string;
-  symbol: string;
-  volumePerUnit: number;
+  price: number;
+  allowedLocationTypes: string[];
+  allowedPlanetTraits: string[];
+  consumes: string[];
+  produces: string[];
 }
 
 export interface Ship {
-  class: string;
-  manufacturer: string;
-  maxCargo: number;
-  plating: number;
-  speed: number;
   type: string;
+  class: string;
+  maxCargo: number;
+  loadingSpeed: number;
+  speed: number;
+  manufacturer: string;
+  plating: number;
   weapons: number;
+  restrictedGoods?: string[];
 }
+
+export type WithToken<T extends {}> = T & { token: string | null };

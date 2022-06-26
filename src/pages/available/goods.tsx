@@ -18,9 +18,10 @@ const GoodsPage: NextPage<GoodsPageProps> = () => {
         title="Goods"
         description="Goods available to purchase"
       />
-      <LoadingGate token={token} {...queryResult}>
-        {(data: Good[]) => (
+      <LoadingGate<Good[]> token={token} {...queryResult}>
+        {(data) => (
           <DataCardLayout
+            pageTitle="Available Goods"
             ignoreDataKeys={['name', 'symbol']}
             defaultOrderKey="name"
           >

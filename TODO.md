@@ -6,3 +6,5 @@
   - [ ] Create initial pages with data fetching
   - [ ] Add more details from [here](https://redux-toolkit.js.org/rtk-query/usage/queries)
   - [ ] Create mutations
+
+- [ ] Create dashboard of person's own stuff (loans, structures, ships, goods, etc.)

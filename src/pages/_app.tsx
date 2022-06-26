@@ -10,6 +10,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import Navbar from '../components/Navbar';
 import OutcomeToasts from '../components/OutcomeToasts';
 import Sidebar from '../components/Sidebar';
+import { generateUrl } from '../lib/utils';
 import store, { persistor } from '../store/store';
 import '../styles/main.scss';
 

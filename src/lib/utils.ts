@@ -1,4 +1,4 @@
-import { every } from 'lodash';
+import { Dictionary, every, identity, pickBy } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
@@ -77,9 +77,12 @@ export const generateApiHandler =
 
 export const generateUrl = (
   path: string,
-  params?: { [key: string]: string }
+  params: { [key: string]: string | null | undefined } = {}
 ): string => {
-  return params ? path + '?' + new URLSearchParams(params) : path;
+  const cleanedParams = pickBy(params, identity) as Dictionary<string>;
+  return Object.keys(cleanedParams).length > 0
+    ? path + '?' + new URLSearchParams(cleanedParams)
+    : path;
 };
 
 export const generateApiUrl = (

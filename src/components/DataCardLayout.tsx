@@ -6,12 +6,14 @@ import DataCard, { DataCardProps } from './DataCard';
 
 interface DataCardLayoutProps {
   children: (Omit<DataCardProps, 'ignoreDataKeys'> & { key: any })[];
+  pageTitle: string;
   defaultOrderKey: string;
   ignoreDataKeys?: string[];
 }
 
 const DataCardLayout: FC<DataCardLayoutProps> = ({
   children,
+  pageTitle,
   defaultOrderKey,
   ignoreDataKeys = [],
 }) => {
@@ -29,6 +31,7 @@ const DataCardLayout: FC<DataCardLayoutProps> = ({
   return (
     <>
       <Stack direction="horizontal" className="mb-3">
+        <h1 className="h5 mb-0">{pageTitle}</h1>
         <InputGroup className="ms-auto" style={{ width: '300px' }}>
           <InputGroup.Text>Sort by</InputGroup.Text>
           <Form.Select
