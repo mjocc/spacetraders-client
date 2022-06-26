@@ -8,6 +8,7 @@ import { useAppSelector } from '../store/hooks';
 import { selectToken } from '../store/slices/auth';
 import { useGetUserQuery } from '../store/slices/spaceTraders/api';
 import { User } from '../store/slices/spaceTraders/types';
+import LoadingScreen from './LoadingScreen';
 
 type CustomNavLinkProps = PropsWithChildren<{
   href: string;
@@ -38,8 +39,8 @@ const Sidebar: FC = () => {
   const router = useRouter();
 
   const token = useAppSelector(selectToken);
-  const { data: rawData, isSuccess } = useGetUserQuery(token);
-  let data: Omit<User, "username"> & { username?: string } | undefined;
+  const { data: rawData, isSuccess, isLoading } = useGetUserQuery(token);
+  let data: (Omit<User, 'username'> & { username?: string }) | undefined;
   if (isSuccess) {
     data = Object.assign({}, rawData);
     data['joinedAt'] = dateFormat(new Date(data.joinedAt), 'd mmmm, yyyy');
@@ -61,16 +62,19 @@ const Sidebar: FC = () => {
           Command history
         </NavLink>
       </Nav>
-      {data && (
-        <ListGroup className="mt-auto mb-3">
-          {Object.entries(data).map(([key, value]) => (
+      <ListGroup className="mt-auto mb-3">
+        {isLoading ? (
+          <LoadingScreen />
+        ) : (
+          data &&
+          Object.entries(data).map(([key, value]) => (
             <ListGroup.Item key={key}>
               <span className="fw-bold">{startCase(key)}</span>:{' '}
               <span>{value.toString()}</span>
             </ListGroup.Item>
-          ))}
-        </ListGroup>
-      )}
+          ))
+        )}
+      </ListGroup>
     </Stack>
   );
 };
