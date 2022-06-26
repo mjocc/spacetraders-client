@@ -1,12 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { generateUrl } from '../../../lib/utils';
-import { Good, Loan, Ship } from './types';
+import { Good, Loan, Ship, User } from './types';
 
 export const spaceTradersApi = createApi({
   reducerPath: 'spaceTraders',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_PATH }),
-  tagTypes: ['Loans', 'Goods', 'Ships'],
+  tagTypes: ['Loans', 'Goods', 'Ships', 'User'],
   endpoints: (builder) => ({
+    getUser: builder.query<User, string | null>({
+      query: (token) =>
+        generateUrl('my/account', token ? { token } : undefined),
+      transformResponse: ({ user }: { user: User }) => user,
+      providesTags: ['User'],
+    }),
     getLoans: builder.query<Loan[], string | null>({
       query: (token) =>
         generateUrl('types/loans', token ? { token } : undefined),
@@ -28,5 +34,9 @@ export const spaceTradersApi = createApi({
   }),
 });
 
-export const { useGetLoansQuery, useGetGoodsQuery, useGetShipsQuery } =
-  spaceTradersApi;
+export const {
+  useGetUserQuery,
+  useGetLoansQuery,
+  useGetGoodsQuery,
+  useGetShipsQuery,
+} = spaceTradersApi;

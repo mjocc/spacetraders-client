@@ -37,18 +37,25 @@ const DataCardLayout: FC<DataCardLayoutProps> = ({
             onChange={(e) => setOrder(e.target.value)}
           >
             {keys.map((key) => (
-              <option key={key} value={key}>{startCase(key)}</option>
+              <option key={key} value={key}>
+                {startCase(key)}
+              </option>
             ))}
           </Form.Select>
         </InputGroup>
       </Stack>
       <Masonry
-        breakpointCols={5}
+        breakpointCols={{ default: 5, 1650: 4, 1300: 3, 1000: 2 }}
         className="masonry-grid"
         columnClassName="masonry-grid_column"
       >
         {orderedCards.map((card) => (
-          <DataCard {...card} key={card.key} ignoreDataKeys={ignoreDataKeys} />
+          <DataCard
+            {...card}
+            key={card.key}
+            ignoreDataKeys={ignoreDataKeys}
+            highlight={order}
+          />
         ))}
       </Masonry>
     </>

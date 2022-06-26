@@ -1,3 +1,11 @@
+export interface User {
+  credits: number;
+  joinedAt: string;
+  shipCount: number;
+  structureCount: number;
+  username: string;
+}
+
 export interface Loan {
   amount: number;
   collateralRequired: boolean;

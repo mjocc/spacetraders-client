@@ -1,7 +1,13 @@
+import dateFormat from 'dateformat';
+import { startCase } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren } from 'react';
-import { Nav } from 'react-bootstrap';
+import { ListGroup, Nav, Stack } from 'react-bootstrap';
+import { useAppSelector } from '../store/hooks';
+import { selectToken } from '../store/slices/auth';
+import { useGetUserQuery } from '../store/slices/spaceTraders/api';
+import { User } from '../store/slices/spaceTraders/types';
 
 type CustomNavLinkProps = PropsWithChildren<{
   href: string;
@@ -31,20 +37,41 @@ const NavLink: FC<CustomNavLinkProps> = ({
 const Sidebar: FC = () => {
   const router = useRouter();
 
+  const token = useAppSelector(selectToken);
+  const { data: rawData, isSuccess } = useGetUserQuery(token);
+  let data: Omit<User, "username"> & { username?: string } | undefined;
+  if (isSuccess) {
+    data = Object.assign({}, rawData);
+    data['joinedAt'] = dateFormat(new Date(data.joinedAt), 'd mmmm, yyyy');
+    delete data.username;
+  }
+
   return (
-    <Nav variant="pills" className="flex-column" activeKey={router.pathname}>
-      <NavLink href="/">Home</NavLink>
-      <hr className="my-2" />
-      <NavLink href="/manage/loans">Loans</NavLink>
-      <NavLink href="/manage/goods">Goods</NavLink>
-      <NavLink href="/manage/ships">Ships</NavLink>
-      <NavLink href="/command/results" hiddenUntilActive>
-        Command results
-      </NavLink>
-      <NavLink href="/command/history" hiddenUntilActive>
-        Command history
-      </NavLink>
-    </Nav>
+    <Stack className="h-100">
+      <Nav variant="pills" className="flex-column" activeKey={router.pathname}>
+        <NavLink href="/">Home</NavLink>
+        <hr className="my-2" />
+        <NavLink href="/manage/loans">Loans</NavLink>
+        <NavLink href="/manage/goods">Goods</NavLink>
+        <NavLink href="/manage/ships">Ships</NavLink>
+        <NavLink href="/command/results" hiddenUntilActive>
+          Command results
+        </NavLink>
+        <NavLink href="/command/history" hiddenUntilActive>
+          Command history
+        </NavLink>
+      </Nav>
+      {data && (
+        <ListGroup className="mt-auto mb-3">
+          {Object.entries(data).map(([key, value]) => (
+            <ListGroup.Item key={key}>
+              <span className="fw-bold">{startCase(key)}</span>:{' '}
+              <span>{value.toString()}</span>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
+    </Stack>
   );
 };
 

@@ -7,7 +7,11 @@ const Layout: FC<PropsWithChildren<{ sidebar: ReactNode }>> = ({
 }) => (
   <Container fluid style={{ paddingTop: '57px' }}>
     <Row className="mt-3">
-      <Col xs={2} className="position-fixed left-0">
+      <Col
+        xs={2}
+        className="position-fixed left-0"
+        style={{ height: 'calc(100vh - 57px - 1rem)' }}
+      >
         {sidebar}
       </Col>
       <Col xs={12} style={{ paddingLeft: '16.666667%' }}>
