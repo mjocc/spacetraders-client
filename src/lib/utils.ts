@@ -1,3 +1,5 @@
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { Dictionary, every, identity, pickBy } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { useRouter } from 'next/router';
@@ -165,4 +167,35 @@ export const useRunCommand = (token: string | null, showBack?: boolean) => {
   };
 };
 
-export type MethodType = 'GET' | 'POST';
+type MutationResult<T> =
+  | {
+      data: T;
+    }
+  | {
+      error: FetchBaseQueryError | SerializedError;
+    };
+export const useMutationResult = () => {
+  const { openToast } = useToast();
+  return async <T>(
+    mutationResultFunc: () => Promise<MutationResult<T>>,
+    successMessage: string
+  ) => {
+    const result = await mutationResultFunc();
+    if ('error' in result) {
+      if ('data' in result.error) {
+        openToast(
+          'error',
+          (result.error.data as { error?: { message?: string } })?.error
+            ?.message ?? 'Something went wrong.',
+          5000
+        );
+      } else {
+        openToast('error', 'Something went wrong.');
+      }
+    } else {
+      openToast('success', successMessage, 5000);
+    }
+  };
+};
+
+export type MethodType = 'GET' | 'POST' | 'PUT';

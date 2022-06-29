@@ -2,17 +2,22 @@ import { NextPage } from 'next';
 import DataCardLayout from '../../components/DataCardLayout';
 import LoadingGate from '../../components/LoadingGate';
 import StandardPageHead from '../../components/StandardPageHead';
+import { useMutationResult } from '../../lib/utils';
 import { useAppSelector } from '../../store/hooks';
 import { selectToken } from '../../store/slices/auth';
-import { useGetLoansQuery, useTakeOutLoanMutation } from '../../store/slices/spaceTraders/api';
+import {
+  useGetLoansQuery,
+  useTakeOutLoanMutation
+} from '../../store/slices/spaceTraders/api';
 import { Loan } from '../../store/slices/spaceTraders/types';
 
 interface LoansPageProps { }
-// TODO: add currently taken loan display to this page (since can only have one)
 const LoansPage: NextPage<LoansPageProps> = () => {
   const token = useAppSelector(selectToken);
   const queryResult = useGetLoansQuery(token);
-  const [takeOutLoan, mutationResult] = useTakeOutLoanMutation()
+  const [takeOutLoan, { isLoading }] = useTakeOutLoanMutation();
+  const handleMutationResult = useMutationResult();
+
   return (
     <>
       <StandardPageHead
@@ -25,15 +30,18 @@ const LoansPage: NextPage<LoansPageProps> = () => {
             pageTitle="Available Loans"
             ignoreDataKeys={['type']}
             defaultOrderKey="type"
+            spinner={isLoading}
           >
             {data.map((loan) => ({
               key: loan.type,
               title: loan.type,
               data: loan,
               buttonText: 'Take loan',
-              //TODO: add spinner while loading + notification once taken
               onButtonClick: () => {
-                takeOutLoan({ token, type: loan.type })
+                handleMutationResult(
+                  () => takeOutLoan({ token, type: loan.type }),
+                  'Loan taken out. See manage loans page for more information.'
+                );
               },
             }))}
           </DataCardLayout>

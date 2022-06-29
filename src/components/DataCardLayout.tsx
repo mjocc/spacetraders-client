@@ -3,12 +3,14 @@ import { FC, useMemo, useState } from 'react';
 import { Form, InputGroup, Stack } from 'react-bootstrap';
 import Masonry from 'react-masonry-css';
 import DataCard, { DataCardProps } from './DataCard';
+import LoadingScreen from './LoadingScreen';
 
 interface DataCardLayoutProps {
   children: (Omit<DataCardProps, 'ignoreDataKeys'> & { key: any })[];
   pageTitle: string;
   defaultOrderKey: string;
   ignoreDataKeys?: string[];
+  spinner?: boolean;
 }
 
 const DataCardLayout: FC<DataCardLayoutProps> = ({
@@ -16,6 +18,7 @@ const DataCardLayout: FC<DataCardLayoutProps> = ({
   pageTitle,
   defaultOrderKey,
   ignoreDataKeys = [],
+  spinner = false,
 }) => {
   const keys = useMemo(
     () =>
@@ -31,6 +34,7 @@ const DataCardLayout: FC<DataCardLayoutProps> = ({
   return (
     <>
       <Stack direction="horizontal" className="mb-3">
+        {spinner && <LoadingScreen compact className="me-3" />}
         <h1 className="h5 mb-0">{pageTitle}</h1>
         <InputGroup className="ms-auto" style={{ width: '300px' }}>
           <InputGroup.Text>Sort by</InputGroup.Text>
