@@ -85,11 +85,18 @@ const CommandBar: FC = () => {
                       >
                         POST
                       </ToggleButton>
+                      <ToggleButton
+                        variant="outline-primary"
+                        id="put-button"
+                        value="PUT"
+                      >
+                        PUT
+                      </ToggleButton>
                     </ToggleButtonGroup>
                     <Form.Label>Method</Form.Label>
                   </Form.Group>
                 </Col>
-                <Col xs={method === 'POST' ? 4 : 8}>
+                <Col xs={method !== 'GET' ? 4 : 8}>
                   <Form.Group controlId="command-bar-path-field">
                     <InputGroup>
                       <ApiDocsPopover>
@@ -108,7 +115,7 @@ const CommandBar: FC = () => {
                     <Form.Label>Path</Form.Label>
                   </Form.Group>
                 </Col>
-                {method === 'POST' && (
+                {method !== 'GET' && (
                   <Col xs={4}>
                     <Form.Group controlId="command-bar-body-field">
                       <Form.Control
