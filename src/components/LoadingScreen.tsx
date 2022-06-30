@@ -7,10 +7,15 @@ interface LoadingScreenProps {
   className?: string;
 }
 
-const LoadingScreen: FC<LoadingScreenProps> = ({ fullscreen, compact, className: customClassName = '' }) => {
+const LoadingScreen: FC<LoadingScreenProps> = ({
+  fullscreen,
+  compact,
+  className: customClassName = '',
+}) => {
   const className =
     (fullscreen ? 'bg-black position-absolute h-100 w-100 top-0 start-0' : '') +
-    ' d-flex justify-content-center align-items-center ' + customClassName;
+    ' d-flex justify-content-center align-items-center ' +
+    customClassName;
   const style = fullscreen || compact ? {} : { height: '16rem' };
 
   return (

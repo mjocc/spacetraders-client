@@ -11,7 +11,8 @@ import {
 } from '../../store/slices/spaceTraders/api';
 import { Loan } from '../../store/slices/spaceTraders/types';
 
-interface LoansPageProps { }
+interface LoansPageProps {}
+
 const LoansPage: NextPage<LoansPageProps> = () => {
   const token = useAppSelector(selectToken);
   const queryResult = useGetLoansQuery(token);
