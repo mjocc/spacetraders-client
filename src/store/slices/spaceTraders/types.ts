@@ -20,6 +20,9 @@ export interface Loan {
   type: string;
 }
 
+// TODO: complete this type
+export interface MyLoan extends Loan {}
+
 export interface Structure {
   type: string;
   name: string;
@@ -29,6 +32,9 @@ export interface Structure {
   consumes: string[];
   produces: string[];
 }
+
+// TODO: complete this type
+export interface MyStructure extends Structure {}
 
 export interface Ship {
   type: string;
@@ -40,6 +46,16 @@ export interface Ship {
   plating: number;
   weapons: number;
   restrictedGoods?: string[];
+}
+
+export interface MyShip extends Ship {
+  id: string;
+  cargo: any[]; // TODO: WHAT TYPE IS THIS?
+  flightPlanId?: string;
+  location: string;
+  spaceAvailable: number;
+  x: number;
+  y: number;
 }
 
 export type WithToken<T extends {}> = T & { token: string | null };

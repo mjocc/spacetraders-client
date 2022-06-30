@@ -7,7 +7,7 @@ import { useAppSelector } from '../../store/hooks';
 import { selectToken } from '../../store/slices/auth';
 import {
   useGetLoansQuery,
-  useTakeOutLoanMutation
+  useTakeOutLoanMutation,
 } from '../../store/slices/spaceTraders/api';
 import { Loan } from '../../store/slices/spaceTraders/types';
 

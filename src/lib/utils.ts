@@ -21,8 +21,14 @@ export const isValidJson = (jsonString: string): boolean => {
 };
 
 export const handleFormChange =
-  (handler: (value: any) => void) => (event: { target: { value: any } }) => {
+  <T extends string>(handler: (value: T) => void) =>
+  (event: { target: { value: T } }) => {
     handler(event.target.value);
+  };
+export const handleFormChangeNum =
+  (handler: (value: number) => void) =>
+  (event: { target: { value: string } }) => {
+    handler(parseInt(event.target.value));
   };
 
 export const makeApiCall = async (apiRoute: string, body: object) =>
