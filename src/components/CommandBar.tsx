@@ -99,7 +99,7 @@ const CommandBar: FC = () => {
                     </Form.Group>
                   </Col>
                   <Col xs={method !== 'GET' ? 4 : 8}>
-                    <Form.Group controlId="command-bar-path-field">
+                    <Form.Group className="ps-4" controlId="command-bar-path-field">
                       <InputGroup>
                         <ApiDocsPopover>
                           <InputGroup.Text id="api-url-prefix">
